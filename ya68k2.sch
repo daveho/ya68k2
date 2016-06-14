@@ -28,7 +28,6 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:MC68901
 LIBS:devices-sergey
 LIBS:ya68k
 LIBS:ya68k2-cache
@@ -256,4 +255,15 @@ F 3 "" H 2350 4300 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	2350 4050 2350 4300
+$Comp
+L 27C040 U?
+U 1 1 57606E10
+P 4900 5850
+F 0 "U?" H 4700 6850 50  0000 C CNN
+F 1 "27C040" H 4900 4450 50  0000 C CNN
+F 2 "" H 4900 5850 50  0000 C CNN
+F 3 "" H 4900 5850 50  0000 C CNN
+	1    4900 5850
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
