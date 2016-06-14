@@ -1,0 +1,259 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:MC68901
+LIBS:devices-sergey
+LIBS:ya68k
+LIBS:ya68k2-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L OSC QG?
+U 1 1 57605491
+P 1950 1500
+F 0 "QG?" H 1750 1850 60  0000 C CNN
+F 1 "OSC" H 1750 1150 60  0000 C CNN
+F 2 "" H 1950 1500 60  0000 C CNN
+F 3 "" H 1950 1500 60  0000 C CNN
+	1    1950 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74LS393 U?
+U 1 1 57605665
+P 4750 1650
+F 0 "U?" H 4900 1900 50  0000 C CNN
+F 1 "74LS393" H 4950 1400 50  0000 C CNN
+F 2 "" H 4750 1650 50  0000 C CNN
+F 3 "" H 4750 1650 50  0000 C CNN
+	1    4750 1650
+	1    0    0    -1  
+$EndComp
+$Comp
+L 74LS393 U?
+U 2 1 576058E6
+P 4750 2350
+F 0 "U?" H 4900 2600 50  0000 C CNN
+F 1 "74LS393" H 4950 2100 50  0000 C CNN
+F 2 "" H 4750 2350 50  0000 C CNN
+F 3 "" H 4750 2350 50  0000 C CNN
+	2    4750 2350
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 57605B26
+P 800 1100
+F 0 "#PWR?" H 800 950 50  0001 C CNN
+F 1 "VCC" H 800 1250 50  0000 C CNN
+F 2 "" H 800 1100 50  0000 C CNN
+F 3 "" H 800 1100 50  0000 C CNN
+	1    800  1100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	800  1100 800  1300
+Wire Wire Line
+	800  1300 1350 1300
+$Comp
+L GND #PWR?
+U 1 1 57605BBE
+P 800 1950
+F 0 "#PWR?" H 800 1700 50  0001 C CNN
+F 1 "GND" H 800 1800 50  0000 C CNN
+F 2 "" H 800 1950 50  0000 C CNN
+F 3 "" H 800 1950 50  0000 C CNN
+	1    800  1950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1350 1700 800  1700
+Wire Wire Line
+	800  1700 800  1950
+Wire Wire Line
+	2550 1500 4050 1500
+Wire Wire Line
+	5450 1800 5500 1800
+Wire Wire Line
+	5500 1800 5500 2000
+Wire Wire Line
+	5500 2000 3850 2000
+Wire Wire Line
+	3850 2000 3850 2200
+Wire Wire Line
+	3850 2200 4050 2200
+$Comp
+L MC68008P U?
+U 1 1 576060A5
+P 8750 2850
+F 0 "U?" H 8700 4350 60  0000 C CNN
+F 1 "MC68008P" H 8750 2850 60  0000 C CNN
+F 2 "" H 8750 2850 60  0000 C CNN
+F 3 "" H 8750 2850 60  0000 C CNN
+	1    8750 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L MAX1232 U?
+U 1 1 57606631
+P 1750 2900
+F 0 "U?" H 1750 3250 60  0000 C CNN
+F 1 "MAX1232" H 1750 2900 60  0000 C CNN
+F 2 "" H 1750 2900 60  0000 C CNN
+F 3 "" H 1750 2900 60  0000 C CNN
+	1    1750 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 57606706
+P 800 2400
+F 0 "#PWR?" H 800 2250 50  0001 C CNN
+F 1 "VCC" H 800 2550 50  0000 C CNN
+F 2 "" H 800 2400 50  0000 C CNN
+F 3 "" H 800 2400 50  0000 C CNN
+	1    800  2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	800  2400 800  2700
+Wire Wire Line
+	800  2700 1150 2700
+$Comp
+L GND #PWR?
+U 1 1 57606744
+P 850 3600
+F 0 "#PWR?" H 850 3350 50  0001 C CNN
+F 1 "GND" H 850 3450 50  0000 C CNN
+F 2 "" H 850 3600 50  0000 C CNN
+F 3 "" H 850 3600 50  0000 C CNN
+	1    850  3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1150 2800 850  2800
+Wire Wire Line
+	850  2800 850  3600
+Wire Wire Line
+	1150 3000 850  3000
+Connection ~ 850  3000
+Wire Wire Line
+	1150 3150 850  3150
+Connection ~ 850  3150
+Text GLabel 3400 900  2    60   Input ~ 0
+CLK
+Wire Wire Line
+	3400 900  3000 900 
+Wire Wire Line
+	3000 900  3000 1500
+Connection ~ 3000 1500
+Text GLabel 6150 1500 2    60   Input ~ 0
+CLKDIV2
+Wire Wire Line
+	5450 1500 6150 1500
+Text GLabel 6150 2500 2    60   Input ~ 0
+CLKDIV256
+Wire Wire Line
+	5450 2500 6150 2500
+$Comp
+L R R?
+U 1 1 5760691F
+P 2850 2150
+F 0 "R?" V 2930 2150 50  0000 C CNN
+F 1 "10K" V 2850 2150 50  0000 C CNN
+F 2 "" V 2780 2150 50  0000 C CNN
+F 3 "" H 2850 2150 50  0000 C CNN
+	1    2850 2150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 1800 3200 1800
+Wire Wire Line
+	3200 1800 3200 2800
+Wire Wire Line
+	3200 2800 2350 2800
+Wire Wire Line
+	4050 2500 3200 2500
+Connection ~ 3200 2500
+Text GLabel 3350 3700 2    60   Input ~ 0
+-RST
+Wire Wire Line
+	2350 2700 3050 2700
+Wire Wire Line
+	3050 2700 3050 3700
+Wire Wire Line
+	3050 3700 3350 3700
+Wire Wire Line
+	2850 2300 2850 2700
+Connection ~ 2850 2700
+Wire Wire Line
+	2350 3000 5700 3000
+Wire Wire Line
+	5700 3000 5700 2500
+Connection ~ 5700 2500
+$Comp
+L SW_PUSH SW?
+U 1 1 57606BDF
+P 2350 3750
+F 0 "SW?" H 2500 3860 50  0000 C CNN
+F 1 "SW_PUSH" H 2350 3670 50  0000 C CNN
+F 2 "" H 2350 3750 50  0000 C CNN
+F 3 "" H 2350 3750 50  0000 C CNN
+	1    2350 3750
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	2350 3150 2350 3450
+$Comp
+L GND #PWR?
+U 1 1 57606CFA
+P 2350 4300
+F 0 "#PWR?" H 2350 4050 50  0001 C CNN
+F 1 "GND" H 2350 4150 50  0000 C CNN
+F 2 "" H 2350 4300 50  0000 C CNN
+F 3 "" H 2350 4300 50  0000 C CNN
+	1    2350 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2350 4050 2350 4300
+$EndSCHEMATC
