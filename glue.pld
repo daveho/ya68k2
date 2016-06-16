@@ -1,0 +1,25 @@
+GAL22V10
+glue
+
+
+; Pins: pin names beginning with "N" are active low.
+; E.g., -AS on the schematic becomes NAS in the GAL
+; equations, and /NAS means that -NAS is asserted.
+
+CLK NRST NAS NDS P5 P6 P7 P8 P9 P10 P11 GND
+P13 P14 P15 P16 P17 P18 P19 P20 P21 P22 P23 VCC
+
+
+; Asynchronous reset when -RST is asserted.
+AR = /NRST
+
+
+
+; Address decoding, chip selects.
+; For now, there are only two devices: a ROM at
+; 0x00000-0x80000, and a '573 output latch at
+; 0x80000-0x100000.  (The latter is for controlling
+; LEDs as a display, to see if the code running from
+; the ROM is actually doing something.)
+
+; vim:syntax=off:
