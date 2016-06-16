@@ -46,56 +46,16 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MC68008P U?
+L MC68008P U5
 U 1 1 57614F4A
 P 3800 3050
-F 0 "U?" H 3750 4550 60  0000 C CNN
+F 0 "U5" H 3750 4550 60  0000 C CNN
 F 1 "MC68008P" H 3800 3050 60  0000 C CNN
 F 2 "" H 3800 3050 60  0000 C CNN
 F 3 "" H 3800 3050 60  0000 C CNN
 	1    3800 3050
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2900 2600 2400 2600
-Wire Wire Line
-	2900 2700 2400 2700
-Wire Wire Line
-	2900 2800 2400 2800
-Wire Wire Line
-	2900 2900 2400 2900
-Wire Wire Line
-	2900 3000 2400 3000
-Wire Wire Line
-	2900 3100 2400 3100
-Wire Wire Line
-	2900 3200 2400 3200
-Wire Wire Line
-	2900 3300 2400 3300
-Wire Wire Line
-	2900 3400 2400 3400
-Wire Wire Line
-	2900 3500 2400 3500
-Wire Wire Line
-	2900 3600 2400 3600
-Wire Wire Line
-	2900 3700 2400 3700
-Wire Wire Line
-	2900 3800 2400 3800
-Wire Wire Line
-	2900 3900 2400 3900
-Wire Wire Line
-	2900 4000 2400 4000
-Wire Wire Line
-	2900 4100 2400 4100
-Wire Wire Line
-	2900 4200 2400 4200
-Wire Wire Line
-	2900 4300 2400 4300
-Wire Wire Line
-	2900 4400 2400 4400
-Wire Wire Line
-	2900 4500 2400 4500
 Text Label 2600 4500 0    60   ~ 0
 A0
 Text Label 2600 4400 0    60   ~ 0
@@ -160,23 +120,8 @@ F 3 "" H 1750 2300 60  0000 C CNN
 	1    1750 2300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	2900 2100 2700 2100
-Wire Wire Line
-	2900 2300 2700 2300
 Text GLabel 2700 2300 0    60   Input ~ 0
 -RST
-Wire Wire Line
-	2900 1900 1750 1900
-Wire Wire Line
-	1750 1800 1750 2300
-Wire Wire Line
-	2900 1800 1750 1800
-Wire Wire Line
-	2900 1700 1750 1700
-Wire Wire Line
-	1750 1700 1750 1500
-Connection ~ 1750 1900
 Text GLabel 2400 4500 0    60   Input ~ 0
 A0
 Text GLabel 2400 4400 0    60   Input ~ 0
@@ -217,22 +162,6 @@ Text GLabel 2400 2700 0    60   Input ~ 0
 A18
 Text GLabel 2400 2600 0    60   Input ~ 0
 A19
-Wire Wire Line
-	4700 4500 5400 4500
-Wire Wire Line
-	4700 4400 5400 4400
-Wire Wire Line
-	4700 4300 5400 4300
-Wire Wire Line
-	4700 4200 5400 4200
-Wire Wire Line
-	4700 4100 5400 4100
-Wire Wire Line
-	4700 4000 5400 4000
-Wire Wire Line
-	4700 3900 5400 3900
-Wire Wire Line
-	4700 3800 5400 3800
 Text Label 5050 4500 0    60   ~ 0
 D0
 Text Label 5050 4400 0    60   ~ 0
@@ -266,10 +195,10 @@ D6
 Text GLabel 5400 3800 2    60   Input ~ 0
 D7
 $Comp
-L GAL22V10 U?
+L GAL22V10 U6
 U 1 1 5761541E
 P 8500 2350
-F 0 "U?" H 8450 3150 60  0000 C CNN
+F 0 "U6" H 8450 3150 60  0000 C CNN
 F 1 "GAL22V10" H 8500 1400 60  0000 C CNN
 F 2 "" H 8500 2350 60  0000 C CNN
 F 3 "" H 8500 2350 60  0000 C CNN
@@ -287,10 +216,6 @@ F 3 "" H 6800 1400 60  0000 C CNN
 	1    6800 1400
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7800 1700 6800 1700
-Wire Wire Line
-	6800 1700 6800 1400
 $Comp
 L GND #PWR?
 U 1 1 57617BBD
@@ -302,12 +227,6 @@ F 3 "" H 6800 1950 60  0000 C CNN
 	1    6800 1950
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7800 1800 6800 1800
-Wire Wire Line
-	4700 3500 5400 3500
-Wire Wire Line
-	4700 3600 5400 3600
 Text Label 5000 3500 0    60   ~ 0
 -AS
 Text Label 5000 3600 0    60   ~ 0
@@ -316,36 +235,18 @@ Text GLabel 5400 3600 2    60   Input ~ 0
 -DS
 Text GLabel 5400 3500 2    60   Input ~ 0
 -AS
-Wire Wire Line
-	4700 3300 5400 3300
 Text GLabel 5400 3300 2    60   Input ~ 0
 RW
-Wire Wire Line
-	7800 2000 7350 2000
 Text GLabel 7350 2000 0    60   Input ~ 0
 CLK
-Wire Wire Line
-	7800 2100 7350 2100
 Text GLabel 7350 2100 0    60   Input ~ 0
 -RST
-Wire Wire Line
-	7800 2200 7350 2200
-Wire Wire Line
-	7800 2300 7350 2300
-Wire Wire Line
-	7800 2400 7350 2400
-Text GLabel 7350 2300 0    60   Input ~ 0
+Text GLabel 7350 2200 0    60   Input ~ 0
 -AS
-Text GLabel 7350 2400 0    60   Input ~ 0
+Text GLabel 7350 2300 0    60   Input ~ 0
 -DS
-Wire Wire Line
-	6800 1800 6800 1950
-Wire Wire Line
-	2900 2400 2700 2400
 Text GLabel 2700 2400 0    60   Input ~ 0
 -HALT
-Text GLabel 7350 2200 0    60   Input ~ 0
-A19
 $Comp
 L 74LS05 U3
 U 3 1 5761C87F
@@ -358,21 +259,6 @@ F 3 "~" H 8250 4600 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R?
-U 1 1 5761C88E
-P 6350 2550
-F 0 "R?" V 6430 2550 40  0000 C CNN
-F 1 "R" V 6357 2551 40  0000 C CNN
-F 2 "~" V 6280 2550 30  0000 C CNN
-F 3 "~" H 6350 2550 30  0000 C CNN
-	1    6350 2550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4700 3100 6350 3100
-Wire Wire Line
-	6350 3100 6350 3300
-$Comp
 L GND #PWR?
 U 1 1 5761C8E6
 P 6350 3300
@@ -383,23 +269,223 @@ F 3 "" H 6350 3300 60  0000 C CNN
 	1    6350 3300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6350 2800 6350 3000
-Wire Wire Line
-	6350 3000 4700 3000
-Wire Wire Line
-	6350 2300 6350 2200
-$Comp
-L VCC #PWR?
-U 1 1 5761CA57
-P 6350 2200
-F 0 "#PWR?" H 6350 2300 30  0001 C CNN
-F 1 "VCC" H 6350 2300 30  0000 C CNN
-F 2 "" H 6350 2200 60  0000 C CNN
-F 3 "" H 6350 2200 60  0000 C CNN
-	1    6350 2200
-	1    0    0    -1  
-$EndComp
 Text Notes 6050 3500 0    60   ~ 0
 -DTACK and -BERR are hard coded\nfor the initial phase of the project\nwhere there is just a ROM device.
+Wire Wire Line
+	2900 2600 2400 2600
+Wire Wire Line
+	2900 2700 2400 2700
+Wire Wire Line
+	2900 2800 2400 2800
+Wire Wire Line
+	2900 2900 2400 2900
+Wire Wire Line
+	2900 3000 2400 3000
+Wire Wire Line
+	2900 3100 2400 3100
+Wire Wire Line
+	2900 3200 2400 3200
+Wire Wire Line
+	2900 3300 2400 3300
+Wire Wire Line
+	2900 3400 2400 3400
+Wire Wire Line
+	2900 3500 2400 3500
+Wire Wire Line
+	2900 3600 2400 3600
+Wire Wire Line
+	2900 3700 2400 3700
+Wire Wire Line
+	2900 3800 2400 3800
+Wire Wire Line
+	2900 3900 2400 3900
+Wire Wire Line
+	2900 4000 2400 4000
+Wire Wire Line
+	2900 4100 2400 4100
+Wire Wire Line
+	2900 4200 2400 4200
+Wire Wire Line
+	2900 4300 2400 4300
+Wire Wire Line
+	2900 4400 2400 4400
+Wire Wire Line
+	2900 4500 2400 4500
+Wire Wire Line
+	2900 2100 2700 2100
+Wire Wire Line
+	2900 2300 2700 2300
+Wire Wire Line
+	2900 1900 1750 1900
+Wire Wire Line
+	1750 1800 1750 2300
+Wire Wire Line
+	2900 1800 1750 1800
+Wire Wire Line
+	2900 1700 1750 1700
+Wire Wire Line
+	1750 1700 1750 1500
+Connection ~ 1750 1900
+Wire Wire Line
+	4700 4500 5400 4500
+Wire Wire Line
+	4700 4400 5400 4400
+Wire Wire Line
+	4700 4300 5400 4300
+Wire Wire Line
+	4700 4200 5400 4200
+Wire Wire Line
+	4700 4100 5400 4100
+Wire Wire Line
+	4700 4000 5400 4000
+Wire Wire Line
+	4700 3900 5400 3900
+Wire Wire Line
+	4700 3800 5400 3800
+Wire Wire Line
+	7800 1700 6800 1700
+Wire Wire Line
+	6800 1700 6800 1400
+Wire Wire Line
+	7800 1800 6800 1800
+Wire Wire Line
+	4700 3500 5400 3500
+Wire Wire Line
+	4700 3600 5400 3600
+Wire Wire Line
+	4700 3300 5400 3300
+Wire Wire Line
+	7800 2000 7350 2000
+Wire Wire Line
+	7800 2100 7350 2100
+Wire Wire Line
+	7800 2200 7350 2200
+Wire Wire Line
+	7800 2300 7350 2300
+Wire Wire Line
+	6800 1800 6800 1950
+Wire Wire Line
+	2900 2400 2700 2400
+Wire Wire Line
+	4700 3100 6350 3100
+Wire Wire Line
+	6350 3100 6350 3300
+$Comp
+L R R?
+U 1 1 5761DC95
+P 6350 1250
+F 0 "R?" V 6430 1250 40  0000 C CNN
+F 1 "10k" V 6357 1251 40  0000 C CNN
+F 2 "~" V 6280 1250 30  0000 C CNN
+F 3 "~" H 6350 1250 30  0000 C CNN
+	1    6350 1250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6350 1000 6350 900 
+$Comp
+L VCC #PWR?
+U 1 1 5761DE7D
+P 6350 900
+F 0 "#PWR?" H 6350 1000 30  0001 C CNN
+F 1 "VCC" H 6350 1000 30  0000 C CNN
+F 2 "" H 6350 900 60  0000 C CNN
+F 3 "" H 6350 900 60  0000 C CNN
+	1    6350 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5761E2E3
+P 6150 1250
+F 0 "R?" V 6230 1250 40  0000 C CNN
+F 1 "10k" V 6157 1251 40  0000 C CNN
+F 2 "~" V 6080 1250 30  0000 C CNN
+F 3 "~" H 6150 1250 30  0000 C CNN
+	1    6150 1250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6150 1000 6150 900 
+$Comp
+L VCC #PWR?
+U 1 1 5761E2EA
+P 6150 900
+F 0 "#PWR?" H 6150 1000 30  0001 C CNN
+F 1 "VCC" H 6150 1000 30  0000 C CNN
+F 2 "" H 6150 900 60  0000 C CNN
+F 3 "" H 6150 900 60  0000 C CNN
+	1    6150 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5761E2F0
+P 5950 1250
+F 0 "R?" V 6030 1250 40  0000 C CNN
+F 1 "10k" V 5957 1251 40  0000 C CNN
+F 2 "~" V 5880 1250 30  0000 C CNN
+F 3 "~" H 5950 1250 30  0000 C CNN
+	1    5950 1250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5950 1000 5950 900 
+$Comp
+L VCC #PWR?
+U 1 1 5761E2F7
+P 5950 900
+F 0 "#PWR?" H 5950 1000 30  0001 C CNN
+F 1 "VCC" H 5950 1000 30  0000 C CNN
+F 2 "" H 5950 900 60  0000 C CNN
+F 3 "" H 5950 900 60  0000 C CNN
+	1    5950 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5761E2FD
+P 5750 1250
+F 0 "R?" V 5830 1250 40  0000 C CNN
+F 1 "10k" V 5757 1251 40  0000 C CNN
+F 2 "~" V 5680 1250 30  0000 C CNN
+F 3 "~" H 5750 1250 30  0000 C CNN
+	1    5750 1250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 1000 5750 900 
+$Comp
+L VCC #PWR?
+U 1 1 5761E304
+P 5750 900
+F 0 "#PWR?" H 5750 1000 30  0001 C CNN
+F 1 "VCC" H 5750 1000 30  0000 C CNN
+F 2 "" H 5750 900 60  0000 C CNN
+F 3 "" H 5750 900 60  0000 C CNN
+	1    5750 900 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4700 1700 5750 1700
+Wire Wire Line
+	5750 1700 5750 1500
+Wire Wire Line
+	4700 1800 5950 1800
+Wire Wire Line
+	5950 1800 5950 1500
+Wire Wire Line
+	4700 2400 6150 2400
+Wire Wire Line
+	6150 2400 6150 1500
+Wire Wire Line
+	4700 3000 6350 3000
+Wire Wire Line
+	6350 3000 6350 1500
+Text Notes 3850 1050 0    60   ~ 0
+The IPL lines are not used at this\npoint (ROM-only) since there are no\nperipherals generating interrupts.
+Wire Wire Line
+	9200 2000 9750 2000
+Text GLabel 9750 2000 2    60   Input ~ 0
+ROMEN
 $EndSCHEMATC
