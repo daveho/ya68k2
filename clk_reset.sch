@@ -37,7 +37,7 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 3
 Title ""
-Date "15 jun 2016"
+Date "16 jun 2016"
 Rev ""
 Comp ""
 Comment1 ""
@@ -50,7 +50,7 @@ L OSC QG1
 U 1 1 57614E05
 P 2750 2050
 F 0 "QG1" H 2550 2400 60  0000 C CNN
-F 1 "7.6864MHz" H 2550 1700 60  0000 C CNN
+F 1 "3.6864MHz" H 2550 1700 60  0000 C CNN
 F 2 "" H 2750 2050 60  0000 C CNN
 F 3 "" H 2750 2050 60  0000 C CNN
 	1    2750 2050

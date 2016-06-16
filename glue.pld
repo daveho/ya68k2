@@ -17,7 +17,7 @@ AR = /NRST
 
 ; Address decoding, chip selects.
 ; For now, there are only two devices: a ROM at
-; 0x00000-0x80000, and a '573 output latch at
+; 0x00000-0x80000, and a '574 output latch at
 ; 0x80000-0x100000.  (The latter is for controlling
 ; LEDs as a display, to see if the code running from
 ; the ROM is actually doing something.)
