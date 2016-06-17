@@ -113,6 +113,8 @@ $Comp
 L GND #PWR?
 U 1 1 57614FC4
 P 1750 2300
+AR Path="/57614FC4" Ref="#PWR?"  Part="1" 
+AR Path="/57614F17/57614FC4" Ref="#PWR?"  Part="1" 
 F 0 "#PWR?" H 1750 2300 30  0001 C CNN
 F 1 "GND" H 1750 2230 30  0001 C CNN
 F 2 "" H 1750 2300 60  0000 C CNN
@@ -220,6 +222,8 @@ $Comp
 L GND #PWR?
 U 1 1 57617BBD
 P 6800 1950
+AR Path="/57617BBD" Ref="#PWR?"  Part="1" 
+AR Path="/57614F17/57617BBD" Ref="#PWR?"  Part="1" 
 F 0 "#PWR?" H 6800 1950 30  0001 C CNN
 F 1 "GND" H 6800 1880 30  0001 C CNN
 F 2 "" H 6800 1950 60  0000 C CNN
@@ -262,6 +266,8 @@ $Comp
 L GND #PWR?
 U 1 1 5761C8E6
 P 6350 3300
+AR Path="/5761C8E6" Ref="#PWR?"  Part="1" 
+AR Path="/57614F17/5761C8E6" Ref="#PWR?"  Part="1" 
 F 0 "#PWR?" H 6350 3300 30  0001 C CNN
 F 1 "GND" H 6350 3230 30  0001 C CNN
 F 2 "" H 6350 3300 60  0000 C CNN
@@ -269,7 +275,7 @@ F 3 "" H 6350 3300 60  0000 C CNN
 	1    6350 3300
 	1    0    0    -1  
 $EndComp
-Text Notes 6050 3500 0    60   ~ 0
+Text Notes 6000 3750 0    60   ~ 0
 -DTACK and -BERR are hard coded\nfor the initial phase of the project\nwhere there is just a ROM device.
 Wire Wire Line
 	2900 2600 2400 2600
@@ -374,6 +380,8 @@ $Comp
 L R R?
 U 1 1 5761DC95
 P 6350 1250
+AR Path="/5761DC95" Ref="R?"  Part="1" 
+AR Path="/57614F17/5761DC95" Ref="R?"  Part="1" 
 F 0 "R?" V 6430 1250 40  0000 C CNN
 F 1 "10k" V 6357 1251 40  0000 C CNN
 F 2 "~" V 6280 1250 30  0000 C CNN
@@ -382,7 +390,7 @@ F 3 "~" H 6350 1250 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6350 1000 6350 900 
+	6350 900  6350 1100
 $Comp
 L VCC #PWR?
 U 1 1 5761DE7D
@@ -398,6 +406,8 @@ $Comp
 L R R?
 U 1 1 5761E2E3
 P 6150 1250
+AR Path="/5761E2E3" Ref="R?"  Part="1" 
+AR Path="/57614F17/5761E2E3" Ref="R?"  Part="1" 
 F 0 "R?" V 6230 1250 40  0000 C CNN
 F 1 "10k" V 6157 1251 40  0000 C CNN
 F 2 "~" V 6080 1250 30  0000 C CNN
@@ -406,7 +416,7 @@ F 3 "~" H 6150 1250 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6150 1000 6150 900 
+	6150 900  6150 1100
 $Comp
 L VCC #PWR?
 U 1 1 5761E2EA
@@ -422,6 +432,8 @@ $Comp
 L R R?
 U 1 1 5761E2F0
 P 5950 1250
+AR Path="/5761E2F0" Ref="R?"  Part="1" 
+AR Path="/57614F17/5761E2F0" Ref="R?"  Part="1" 
 F 0 "R?" V 6030 1250 40  0000 C CNN
 F 1 "10k" V 5957 1251 40  0000 C CNN
 F 2 "~" V 5880 1250 30  0000 C CNN
@@ -430,7 +442,7 @@ F 3 "~" H 5950 1250 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5950 1000 5950 900 
+	5950 900  5950 1100
 $Comp
 L VCC #PWR?
 U 1 1 5761E2F7
@@ -446,6 +458,8 @@ $Comp
 L R R?
 U 1 1 5761E2FD
 P 5750 1250
+AR Path="/5761E2FD" Ref="R?"  Part="1" 
+AR Path="/57614F17/5761E2FD" Ref="R?"  Part="1" 
 F 0 "R?" V 5830 1250 40  0000 C CNN
 F 1 "10k" V 5757 1251 40  0000 C CNN
 F 2 "~" V 5680 1250 30  0000 C CNN
@@ -454,7 +468,7 @@ F 3 "~" H 5750 1250 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5750 1000 5750 900 
+	5750 900  5750 1100
 $Comp
 L VCC #PWR?
 U 1 1 5761E304
@@ -467,21 +481,21 @@ F 3 "" H 5750 900 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4700 1700 5750 1700
+	5750 1700 4700 1700
 Wire Wire Line
-	5750 1700 5750 1500
+	5750 1400 5750 1700
 Wire Wire Line
-	4700 1800 5950 1800
+	5950 1800 4700 1800
 Wire Wire Line
-	5950 1800 5950 1500
+	5950 1400 5950 1800
 Wire Wire Line
-	4700 2400 6150 2400
+	6150 2400 4700 2400
 Wire Wire Line
-	6150 2400 6150 1500
+	6150 1400 6150 2400
 Wire Wire Line
-	4700 3000 6350 3000
+	6350 3000 4700 3000
 Wire Wire Line
-	6350 3000 6350 1500
+	6350 1400 6350 3000
 Text Notes 3850 1050 0    60   ~ 0
 The IPL lines are not used at this\npoint (ROM-only) since there are no\nperipherals generating interrupts.
 Wire Wire Line
