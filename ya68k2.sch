@@ -33,7 +33,7 @@ EELAYER 25 0
 EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
-Sheet 1 3
+Sheet 1 4
 Title ""
 Date "16 jun 2016"
 Rev ""
@@ -54,5 +54,11 @@ S 1400 2400 1650 950
 U 57614F17
 F0 "CPU and glue logic" 50
 F1 "cpu_glue_logic.sch" 50
+$EndSheet
+$Sheet
+S 1400 3900 1650 1050
+U 57656C00
+F0 "Memory devices" 60
+F1 "memory.sch" 60
 $EndSheet
 $EndSCHEMATC
