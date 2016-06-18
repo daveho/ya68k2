@@ -33,7 +33,7 @@ EELAYER 25 0
 EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
-Sheet 1 4
+Sheet 1 5
 Title ""
 Date "16 jun 2016"
 Rev ""
@@ -60,5 +60,11 @@ S 1400 3900 1650 1050
 U 57656C00
 F0 "Memory devices" 60
 F1 "memory.sch" 60
+$EndSheet
+$Sheet
+S 1400 5400 1650 1050
+U 57657430
+F0 "I/O devices" 60
+F1 "iodev.sch" 60
 $EndSheet
 $EndSCHEMATC
