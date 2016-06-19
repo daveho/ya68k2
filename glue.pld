@@ -17,7 +17,7 @@ AR = /NRST
 
 ; Address decoding, chip selects.
 ; For now, there are only two devices: a ROM at
-; 0x00000-0x80000, and a '574 output latch at
+; 0x00000-0x80000, and a '374 output latch at
 ; 0x80000-0x100000.  (The latter is for controlling
 ; LEDs as a display, to see if the code running from
 ; the ROM is actually doing something.)
@@ -32,7 +32,7 @@ AR = /NRST
 /NROMEN = /NAS*RW*/A19
 
 
-; Chip select for '574 output port.
+; Chip select for '374 output port.
 ; For now it is mapped at 0x80000-0x100000.
 ; We feed this into the CP (clock pulse) pin,
 ; and the data is latched on a low-to high transition,
