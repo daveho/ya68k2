@@ -151,37 +151,37 @@ Text GLabel 1700 3350 0    60   Input ~ 0
 A18
 Text GLabel 1700 3250 0    60   Input ~ 0
 A19
-Text Label 4350 5150 0    60   ~ 0
+Text Label 5850 5150 0    60   ~ 0
 D0
-Text Label 4350 5050 0    60   ~ 0
+Text Label 5850 5050 0    60   ~ 0
 D1
-Text Label 4350 4950 0    60   ~ 0
+Text Label 5850 4950 0    60   ~ 0
 D2
-Text Label 4350 4850 0    60   ~ 0
+Text Label 5850 4850 0    60   ~ 0
 D3
-Text Label 4350 4750 0    60   ~ 0
+Text Label 5850 4750 0    60   ~ 0
 D4
-Text Label 4350 4650 0    60   ~ 0
+Text Label 5850 4650 0    60   ~ 0
 D5
-Text Label 4350 4550 0    60   ~ 0
+Text Label 5850 4550 0    60   ~ 0
 D6
-Text Label 4350 4450 0    60   ~ 0
+Text Label 5850 4450 0    60   ~ 0
 D7
-Text GLabel 4700 5150 2    60   Input ~ 0
+Text GLabel 6200 5150 2    60   Input ~ 0
 D0
-Text GLabel 4700 5050 2    60   Input ~ 0
+Text GLabel 6200 5050 2    60   Input ~ 0
 D1
-Text GLabel 4700 4950 2    60   Input ~ 0
+Text GLabel 6200 4950 2    60   Input ~ 0
 D2
-Text GLabel 4700 4850 2    60   Input ~ 0
+Text GLabel 6200 4850 2    60   Input ~ 0
 D3
-Text GLabel 4700 4750 2    60   Input ~ 0
+Text GLabel 6200 4750 2    60   Input ~ 0
 D4
-Text GLabel 4700 4650 2    60   Input ~ 0
+Text GLabel 6200 4650 2    60   Input ~ 0
 D5
-Text GLabel 4700 4550 2    60   Input ~ 0
+Text GLabel 6200 4550 2    60   Input ~ 0
 D6
-Text GLabel 4700 4450 2    60   Input ~ 0
+Text GLabel 6200 4450 2    60   Input ~ 0
 D7
 $Comp
 L GAL22V10 U6
@@ -240,8 +240,8 @@ F 3 "" H 5650 3950 60  0000 C CNN
 	1    5650 3950
 	1    0    0    -1  
 $EndComp
-Text Notes 5300 4500 0    60   ~ 0
--DTACK and -BERR are hard coded\nfor the initial phase of the project\nwhere there are just ROM and\noutput port devices.
+Text Notes 4200 3600 0    60   ~ 0
+-DTACK and -BERR are hard\ncoded for the initial phase of\nthe project (with just ROM and\noutput port devices.)
 Wire Wire Line
 	2200 3250 1700 3250
 Wire Wire Line
@@ -294,21 +294,21 @@ Wire Wire Line
 	2200 2450 1050 2450
 Connection ~ 1050 2550
 Wire Wire Line
-	4000 5150 4700 5150
+	4000 5150 6200 5150
 Wire Wire Line
-	4000 5050 4700 5050
+	4000 5050 6200 5050
 Wire Wire Line
-	4000 4950 4700 4950
+	4000 4950 6200 4950
 Wire Wire Line
-	4000 4850 4700 4850
+	4000 4850 6200 4850
 Wire Wire Line
-	4000 4750 4700 4750
+	4000 4750 6200 4750
 Wire Wire Line
-	4000 4650 4700 4650
+	4000 4650 6200 4650
 Wire Wire Line
-	4000 4550 4700 4550
+	4000 4550 6200 4550
 Wire Wire Line
-	4000 4450 4700 4450
+	4000 4450 6200 4450
 Wire Wire Line
 	7700 2450 6700 2450
 Wire Wire Line
@@ -553,4 +553,72 @@ Connection ~ 6850 1800
 Wire Wire Line
 	6850 2250 6850 2450
 Connection ~ 6850 2450
+$Comp
+L RR8 RR?
+U 1 1 57669443
+P 7400 5850
+F 0 "RR?" H 7450 6400 50  0000 C CNN
+F 1 "10k" V 7430 5850 50  0000 C CNN
+F 2 "" H 7400 5850 50  0000 C CNN
+F 3 "" H 7400 5850 50  0000 C CNN
+	1    7400 5850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7050 5400 6900 5400
+Wire Wire Line
+	6900 5400 6900 5100
+$Comp
+L VCC #PWR?
+U 1 1 57669724
+P 6900 5100
+F 0 "#PWR?" H 6900 4950 50  0001 C CNN
+F 1 "VCC" H 6900 5250 50  0000 C CNN
+F 2 "" H 6900 5100 50  0000 C CNN
+F 3 "" H 6900 5100 50  0000 C CNN
+	1    6900 5100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7050 5500 5550 5500
+Wire Wire Line
+	5550 5500 5550 5150
+Connection ~ 5550 5150
+Wire Wire Line
+	7050 5600 5450 5600
+Wire Wire Line
+	5450 5600 5450 5050
+Connection ~ 5450 5050
+Wire Wire Line
+	7050 5700 5350 5700
+Wire Wire Line
+	5350 5700 5350 4950
+Connection ~ 5350 4950
+Wire Wire Line
+	7050 5800 5250 5800
+Wire Wire Line
+	5250 5800 5250 4850
+Connection ~ 5250 4850
+Wire Wire Line
+	7050 5900 5150 5900
+Wire Wire Line
+	5150 5900 5150 4750
+Connection ~ 5150 4750
+Wire Wire Line
+	7050 6000 5050 6000
+Wire Wire Line
+	5050 6000 5050 4650
+Connection ~ 5050 4650
+Wire Wire Line
+	7050 6100 4950 6100
+Wire Wire Line
+	4950 6100 4950 4550
+Connection ~ 4950 4550
+Wire Wire Line
+	7050 6200 4850 6200
+Wire Wire Line
+	4850 6200 4850 4450
+Connection ~ 4850 4450
+Text Notes 7650 5650 0    60   ~ 0
+10k pull ups on data bus, idea from 68Katy\n(http://www.bigmessowires.com/68-katy/)
 $EndSCHEMATC
