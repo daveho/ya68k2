@@ -7,11 +7,19 @@ glue
 ; equations, and /NAS means that -NAS is asserted.
 
 CLK NRST NAS NDS RW FC0 FC1 FC2 A16 A17 A18 GND
-A19 P14 P15 P16 P17 NOPORTEN P19 P20 P21 P22 NROMEN VCC
+A19 NDEVOE P15 P16 P17 NOPORTEN P19 P20 P21 P22 NROMEN VCC
 
 
 ; Asynchronous reset when -RST is asserted.
 AR = /NRST
+
+
+; -DEVOE signal: this inverts the processor's
+; R/-W signal.  The idea is to feed it to the
+; -OE pin of I/O devices so that they output to
+; the bus during read cycles and read from
+; the bus during write cycles.
+NDEVOE = /RW
 
 
 
@@ -26,9 +34,8 @@ AR = /NRST
 ; Chip select for ROM.
 ; For now, it is mapped at 0x00000-0x80000 (A19 low).
 ; The SST39SF040 has an active-low chip enable.
-; We will feed the processor's -DS line into the chip's
-; -OE (active low output enable) pin, which is why it isn't
-; included here.
+; Note that the ROM is only enabled for reading
+; (R/-W high).
 /NROMEN = /NAS*RW*/A19
 
 

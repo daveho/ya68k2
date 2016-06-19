@@ -46,247 +46,247 @@ $EndDescr
 $Comp
 L SST39SF040 U7
 U 1 1 57656CF9
-P 5800 3300
-F 0 "U7" H 5900 4600 50  0000 C CNN
-F 1 "SST39SF040" H 5800 2100 50  0000 C CNN
-F 2 "" H 5800 3600 50  0000 C CNN
-F 3 "" H 5800 3600 50  0000 C CNN
-	1    5800 3300
+P 3450 2450
+F 0 "U7" H 3550 3750 50  0000 C CNN
+F 1 "SST39SF040" H 3450 1250 50  0000 C CNN
+F 2 "" H 3450 2750 50  0000 C CNN
+F 3 "" H 3450 2750 50  0000 C CNN
+	1    3450 2450
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5200 2100 4700 2100
+	2850 1250 2350 1250
 Wire Wire Line
-	5200 2200 4700 2200
+	2850 1350 2350 1350
 Wire Wire Line
-	5200 2300 4700 2300
+	2850 1450 2350 1450
 Wire Wire Line
-	5200 2400 4700 2400
+	2850 1550 2350 1550
 Wire Wire Line
-	5200 2500 4700 2500
+	2850 1650 2350 1650
 Wire Wire Line
-	5200 2600 4700 2600
+	2850 1750 2350 1750
 Wire Wire Line
-	5200 2700 4700 2700
+	2850 1850 2350 1850
 Wire Wire Line
-	5200 2800 4700 2800
+	2850 1950 2350 1950
 Wire Wire Line
-	5200 2900 4700 2900
+	2850 2050 2350 2050
 Wire Wire Line
-	5200 3000 4700 3000
+	2850 2150 2350 2150
 Wire Wire Line
-	5200 3100 4700 3100
+	2850 2250 2350 2250
 Wire Wire Line
-	5200 3200 4700 3200
+	2850 2350 2350 2350
 Wire Wire Line
-	5200 3300 4700 3300
+	2850 2450 2350 2450
 Wire Wire Line
-	5200 3400 4700 3400
+	2850 2550 2350 2550
 Wire Wire Line
-	5200 3500 4700 3500
+	2850 2650 2350 2650
 Wire Wire Line
-	5200 3600 4700 3600
+	2850 2750 2350 2750
 Wire Wire Line
-	5200 3700 4700 3700
+	2850 2850 2350 2850
 Wire Wire Line
-	5200 3800 4700 3800
+	2850 2950 2350 2950
 Wire Wire Line
-	5200 3900 4700 3900
-Text Label 5050 2100 2    60   ~ 0
+	2850 3050 2350 3050
+Text Label 2700 1250 2    60   ~ 0
 A0
-Text Label 5050 2200 2    60   ~ 0
+Text Label 2700 1350 2    60   ~ 0
 A1
-Text Label 5050 2300 2    60   ~ 0
+Text Label 2700 1450 2    60   ~ 0
 A2
-Text Label 5050 2400 2    60   ~ 0
+Text Label 2700 1550 2    60   ~ 0
 A3
-Text Label 5050 2500 2    60   ~ 0
+Text Label 2700 1650 2    60   ~ 0
 A4
-Text Label 5050 2600 2    60   ~ 0
+Text Label 2700 1750 2    60   ~ 0
 A5
-Text Label 5050 2700 2    60   ~ 0
+Text Label 2700 1850 2    60   ~ 0
 A6
-Text Label 5050 2800 2    60   ~ 0
+Text Label 2700 1950 2    60   ~ 0
 A7
-Text Label 5050 2900 2    60   ~ 0
+Text Label 2700 2050 2    60   ~ 0
 A8
-Text Label 5050 3000 2    60   ~ 0
+Text Label 2700 2150 2    60   ~ 0
 A9
-Text Label 5050 3100 2    60   ~ 0
+Text Label 2700 2250 2    60   ~ 0
 A10
-Text Label 5050 3200 2    60   ~ 0
+Text Label 2700 2350 2    60   ~ 0
 A11
-Text Label 5050 3300 2    60   ~ 0
+Text Label 2700 2450 2    60   ~ 0
 A12
-Text Label 5050 3400 2    60   ~ 0
+Text Label 2700 2550 2    60   ~ 0
 A13
-Text Label 5050 3500 2    60   ~ 0
+Text Label 2700 2650 2    60   ~ 0
 A14
-Text Label 5050 3600 2    60   ~ 0
+Text Label 2700 2750 2    60   ~ 0
 A15
-Text Label 5050 3700 2    60   ~ 0
+Text Label 2700 2850 2    60   ~ 0
 A16
-Text Label 5050 3800 2    60   ~ 0
+Text Label 2700 2950 2    60   ~ 0
 A17
-Text Label 5050 3900 2    60   ~ 0
+Text Label 2700 3050 2    60   ~ 0
 A18
-Text GLabel 4700 2100 0    60   Input ~ 0
+Text GLabel 2350 1250 0    60   Input ~ 0
 A0
-Text GLabel 4700 2200 0    60   Input ~ 0
+Text GLabel 2350 1350 0    60   Input ~ 0
 A1
-Text GLabel 4700 2300 0    60   Input ~ 0
+Text GLabel 2350 1450 0    60   Input ~ 0
 A2
-Text GLabel 4700 2400 0    60   Input ~ 0
+Text GLabel 2350 1550 0    60   Input ~ 0
 A3
-Text GLabel 4700 2500 0    60   Input ~ 0
+Text GLabel 2350 1650 0    60   Input ~ 0
 A4
-Text GLabel 4700 2600 0    60   Input ~ 0
+Text GLabel 2350 1750 0    60   Input ~ 0
 A5
-Text GLabel 4700 2700 0    60   Input ~ 0
+Text GLabel 2350 1850 0    60   Input ~ 0
 A6
-Text GLabel 4700 2800 0    60   Input ~ 0
+Text GLabel 2350 1950 0    60   Input ~ 0
 A7
-Text GLabel 4700 2900 0    60   Input ~ 0
+Text GLabel 2350 2050 0    60   Input ~ 0
 A8
-Text GLabel 4700 3000 0    60   Input ~ 0
+Text GLabel 2350 2150 0    60   Input ~ 0
 A9
-Text GLabel 4700 3100 0    60   Input ~ 0
+Text GLabel 2350 2250 0    60   Input ~ 0
 A10
-Text GLabel 4700 3200 0    60   Input ~ 0
+Text GLabel 2350 2350 0    60   Input ~ 0
 A11
-Text GLabel 4700 3300 0    60   Input ~ 0
+Text GLabel 2350 2450 0    60   Input ~ 0
 A12
-Text GLabel 4700 3400 0    60   Input ~ 0
+Text GLabel 2350 2550 0    60   Input ~ 0
 A13
-Text GLabel 4700 3500 0    60   Input ~ 0
+Text GLabel 2350 2650 0    60   Input ~ 0
 A14
-Text GLabel 4700 3600 0    60   Input ~ 0
+Text GLabel 2350 2750 0    60   Input ~ 0
 A15
-Text GLabel 4700 3700 0    60   Input ~ 0
+Text GLabel 2350 2850 0    60   Input ~ 0
 A16
-Text GLabel 4700 3800 0    60   Input ~ 0
+Text GLabel 2350 2950 0    60   Input ~ 0
 A17
-Text GLabel 4700 3900 0    60   Input ~ 0
+Text GLabel 2350 3050 0    60   Input ~ 0
 A18
 Wire Wire Line
-	6400 2100 6950 2100
+	4050 1250 4600 1250
 Wire Wire Line
-	6400 2200 6950 2200
+	4050 1350 4600 1350
 Wire Wire Line
-	6400 2300 6950 2300
+	4050 1450 4600 1450
 Wire Wire Line
-	6400 2400 6950 2400
+	4050 1550 4600 1550
 Wire Wire Line
-	6400 2500 6950 2500
+	4050 1650 4600 1650
 Wire Wire Line
-	6400 2600 6950 2600
+	4050 1750 4600 1750
 Wire Wire Line
-	6400 2700 6950 2700
+	4050 1850 4600 1850
 Wire Wire Line
-	6400 2800 6950 2800
-Text Label 6550 2100 0    60   ~ 0
+	4050 1950 4600 1950
+Text Label 4200 1250 0    60   ~ 0
 D0
-Text Label 6550 2200 0    60   ~ 0
+Text Label 4200 1350 0    60   ~ 0
 D1
-Text Label 6550 2300 0    60   ~ 0
+Text Label 4200 1450 0    60   ~ 0
 D2
-Text Label 6550 2400 0    60   ~ 0
+Text Label 4200 1550 0    60   ~ 0
 D3
-Text Label 6550 2500 0    60   ~ 0
+Text Label 4200 1650 0    60   ~ 0
 D4
-Text Label 6550 2600 0    60   ~ 0
+Text Label 4200 1750 0    60   ~ 0
 D5
-Text Label 6550 2700 0    60   ~ 0
+Text Label 4200 1850 0    60   ~ 0
 D6
-Text Label 6550 2800 0    60   ~ 0
+Text Label 4200 1950 0    60   ~ 0
 D7
-Text GLabel 6950 2100 2    60   Input ~ 0
+Text GLabel 4600 1250 2    60   Input ~ 0
 D0
-Text GLabel 6950 2200 2    60   Input ~ 0
+Text GLabel 4600 1350 2    60   Input ~ 0
 D1
-Text GLabel 6950 2300 2    60   Input ~ 0
+Text GLabel 4600 1450 2    60   Input ~ 0
 D2
-Text GLabel 6950 2400 2    60   Input ~ 0
+Text GLabel 4600 1550 2    60   Input ~ 0
 D3
-Text GLabel 6950 2500 2    60   Input ~ 0
+Text GLabel 4600 1650 2    60   Input ~ 0
 D4
-Text GLabel 6950 2600 2    60   Input ~ 0
+Text GLabel 4600 1750 2    60   Input ~ 0
 D5
-Text GLabel 6950 2700 2    60   Input ~ 0
+Text GLabel 4600 1850 2    60   Input ~ 0
 D6
-Text GLabel 6950 2800 2    60   Input ~ 0
+Text GLabel 4600 1950 2    60   Input ~ 0
 D7
 Wire Wire Line
-	5200 4400 4700 4400
+	2850 3550 2350 3550
 Wire Wire Line
-	5200 4300 4700 4300
-Text GLabel 4700 4300 0    60   Input ~ 0
+	2850 3450 2350 3450
+Text GLabel 2350 3450 0    60   Input ~ 0
 -ROMEN
-Text GLabel 4700 4400 0    60   Input ~ 0
--DS
 Wire Wire Line
-	5200 4100 3500 4100
-Wire Wire Line
-	3500 4100 3500 3500
+	1600 3250 1600 2650
 $Comp
 L R R7
 U 1 1 57657293
-P 3500 3350
-F 0 "R7" V 3580 3350 50  0000 C CNN
-F 1 "10k" V 3500 3350 50  0000 C CNN
-F 2 "" V 3430 3350 50  0000 C CNN
-F 3 "" H 3500 3350 50  0000 C CNN
-	1    3500 3350
+P 1600 2500
+F 0 "R7" V 1680 2500 50  0000 C CNN
+F 1 "10k" V 1600 2500 50  0000 C CNN
+F 2 "" V 1530 2500 50  0000 C CNN
+F 3 "" H 1600 2500 50  0000 C CNN
+	1    1600 2500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3500 3200 3500 3000
+	1600 2350 1600 2150
 $Comp
 L VCC #PWR?
 U 1 1 576572F0
-P 3500 3000
-F 0 "#PWR?" H 3500 2850 50  0001 C CNN
-F 1 "VCC" H 3500 3150 50  0000 C CNN
-F 2 "" H 3500 3000 50  0000 C CNN
-F 3 "" H 3500 3000 50  0000 C CNN
-	1    3500 3000
+P 1600 2150
+F 0 "#PWR?" H 1600 2000 50  0001 C CNN
+F 1 "VCC" H 1600 2300 50  0000 C CNN
+F 2 "" H 1600 2150 50  0000 C CNN
+F 3 "" H 1600 2150 50  0000 C CNN
+	1    1600 2150
 	1    0    0    -1  
 $EndComp
 $Comp
 L VCC #PWR?
 U 1 1 57659904
-P 1850 2750
-F 0 "#PWR?" H 1850 2600 50  0001 C CNN
-F 1 "VCC" H 1850 2900 50  0000 C CNN
-F 2 "" H 1850 2750 50  0000 C CNN
-F 3 "" H 1850 2750 50  0000 C CNN
-	1    1850 2750
+P 1100 1750
+F 0 "#PWR?" H 1100 1600 50  0001 C CNN
+F 1 "VCC" H 1100 1900 50  0000 C CNN
+F 2 "" H 1100 1750 50  0000 C CNN
+F 3 "" H 1100 1750 50  0000 C CNN
+	1    1100 1750
 	1    0    0    -1  
 $EndComp
 $Comp
 L GND #PWR?
 U 1 1 57659924
-P 1850 3600
-F 0 "#PWR?" H 1850 3350 50  0001 C CNN
-F 1 "GND" H 1850 3450 50  0000 C CNN
-F 2 "" H 1850 3600 50  0000 C CNN
-F 3 "" H 1850 3600 50  0000 C CNN
-	1    1850 3600
+P 1100 2600
+F 0 "#PWR?" H 1100 2350 50  0001 C CNN
+F 1 "GND" H 1100 2450 50  0000 C CNN
+F 2 "" H 1100 2600 50  0000 C CNN
+F 3 "" H 1100 2600 50  0000 C CNN
+	1    1100 2600
 	1    0    0    -1  
 $EndComp
 $Comp
 L C C8
 U 1 1 5765993C
-P 1850 3150
-F 0 "C8" H 1875 3250 50  0000 L CNN
-F 1 "0.1uF" H 1875 3050 50  0000 L CNN
-F 2 "" H 1888 3000 50  0000 C CNN
-F 3 "" H 1850 3150 50  0000 C CNN
-	1    1850 3150
+P 1100 2150
+F 0 "C8" H 1125 2250 50  0000 L CNN
+F 1 "0.1uF" H 1125 2050 50  0000 L CNN
+F 2 "" H 1138 2000 50  0000 C CNN
+F 3 "" H 1100 2150 50  0000 C CNN
+	1    1100 2150
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1850 3000 1850 2750
+	1100 2000 1100 1750
 Wire Wire Line
-	1850 3300 1850 3600
+	1100 2300 1100 2600
+Text GLabel 2350 3550 0    60   Input ~ 0
+-NDEVOE
+Wire Wire Line
+	2850 3250 1600 3250
 $EndSCHEMATC

@@ -621,4 +621,10 @@ Wire Wire Line
 Connection ~ 4850 4450
 Text Notes 7650 5650 0    60   ~ 0
 10k pull ups on data bus, idea from 68Katy\n(http://www.bigmessowires.com/68-katy/)
+Wire Wire Line
+	9100 3550 9650 3550
+Text GLabel 9650 3550 2    60   Input ~ 0
+-DEVOE
+Text Notes 10300 4300 2    60   ~ 0
+-DEVOE inverts processor's\nR/-W, and is fed to the -OE\npin of I/O devices so that they\noutput to data bus during read\ncycles and read from data bus\nduring write cycles. (Another\nidea stolen from 68Katy.)
 $EndSCHEMATC
