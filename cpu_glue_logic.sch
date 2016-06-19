@@ -94,8 +94,6 @@ Text Label 1550 3350 0    60   ~ 0
 A18
 Text Label 1550 3250 0    60   ~ 0
 A19
-Text GLabel 1650 2750 0    60   Input ~ 0
-CLKDIV2
 $Comp
 L GND #PWR?
 U 1 1 57614FC4
@@ -644,4 +642,6 @@ Wire Wire Line
 	5350 2050 5350 3450
 Wire Wire Line
 	5350 3450 3650 3450
+Text GLabel 1650 2750 0    60   Input ~ 0
+CLK
 $EndSCHEMATC
