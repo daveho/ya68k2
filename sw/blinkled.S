@@ -17,7 +17,7 @@
  */
 .org 0
 	move.l #OPORT, %a0	/* address of the output port */
-	move.b 0x55, %d0	/* bit pattern to write to the output port */
+	move.b #0x55, %d0	/* bit pattern to write to the output port */
 
 .top:
 	move.b %d0, (%a0)	/* write data to the output port */
