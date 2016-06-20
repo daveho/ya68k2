@@ -26,6 +26,15 @@ Planned additions:
 * MC68901 MFP (multifunction peripheral): for timers and UART
 * MAX232: to interface MFP UART with RS-232 voltage levels
 
+## Files
+
+The `hw` directory has the [KiCAD](http://kicad-pcb.org/) files, currently just a schematic since there's no PCB yet.  It also has the PLD equations for the GAL22V10 used for glue logic and address decoding.  The PLD file needs [galasm](https://github.com/daveho/galasm) to compile it into a JEDEC file which can be used to program the GAL22V10 device.
+
+The `sw` directory has the firmware, currently just an attempt at a blinking LED demo.
+
+The `scripts` directory has some useful scripts, including a script to download and build a m68k-unknown-elf binutils/gcc toolchain (which is needed to build the code in the `sw` directory.)
+
+
 ## Other 68008 projects
 
 I have used other 68008 projects as a source of ideas, including:
