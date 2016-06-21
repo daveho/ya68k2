@@ -28,6 +28,8 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:ya68k
+LIBS:borniers
 LIBS:ya68k2-cache
 EELAYER 25 0
 EELAYER END
@@ -158,4 +160,31 @@ F 3 "" H 4950 2400 50  0000 C CNN
 	1    4950 2400
 	1    0    0    -1  
 $EndComp
+$Comp
+L CONN_01X08 P2
+U 1 1 5769360F
+P 6400 2250
+F 0 "P2" H 6400 2700 50  0000 C CNN
+F 1 "CONN_01X08" V 6500 2250 50  0000 C CNN
+F 2 "" H 6400 2250 50  0000 C CNN
+F 3 "" H 6400 2250 50  0000 C CNN
+	1    6400 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5650 1900 6200 1900
+Wire Wire Line
+	5650 2000 6200 2000
+Wire Wire Line
+	5650 2100 6200 2100
+Wire Wire Line
+	5650 2200 6200 2200
+Wire Wire Line
+	5650 2300 6200 2300
+Wire Wire Line
+	5650 2400 6200 2400
+Wire Wire Line
+	5650 2500 6200 2500
+Wire Wire Line
+	5650 2600 6200 2600
 $EndSCHEMATC

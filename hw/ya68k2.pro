@@ -1,4 +1,4 @@
-update=22/05/2015 07:44:53
+update=Tue 21 Jun 2016 08:29:13 AM EDT
 version=1
 last_client=kicad
 [general]
@@ -60,3 +60,5 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
+LibName30=ya68k
+LibName31=borniers

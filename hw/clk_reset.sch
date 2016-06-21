@@ -28,6 +28,8 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:ya68k
+LIBS:borniers
 LIBS:ya68k2-cache
 EELAYER 25 0
 EELAYER END
@@ -401,4 +403,81 @@ F 3 "" H 7550 3650 50  0000 C CNN
 	1    7550 3650
 	1    0    0    -1  
 $EndComp
+$Comp
+L CONN_2 P1
+U 1 1 5769381B
+P 3500 6450
+F 0 "P1" V 3450 6450 40  0000 C CNN
+F 1 "CONN_2" V 3550 6450 40  0000 C CNN
+F 2 "" H 3500 6450 60  0000 C CNN
+F 3 "" H 3500 6450 60  0000 C CNN
+	1    3500 6450
+	1    0    0    -1  
+$EndComp
+$Comp
+L VCC #PWR?
+U 1 1 57693A6A
+P 2450 5900
+F 0 "#PWR?" H 2450 5750 50  0001 C CNN
+F 1 "VCC" H 2450 6050 50  0000 C CNN
+F 2 "" H 2450 5900 50  0000 C CNN
+F 3 "" H 2450 5900 50  0000 C CNN
+	1    2450 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 57693A9C
+P 2450 7200
+F 0 "#PWR?" H 2450 6950 50  0001 C CNN
+F 1 "GND" H 2450 7050 50  0000 C CNN
+F 2 "" H 2450 7200 50  0000 C CNN
+F 3 "" H 2450 7200 50  0000 C CNN
+	1    2450 7200
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D1
+U 1 1 57693D7E
+P 2450 6300
+F 0 "D1" H 2450 6400 50  0000 C CNN
+F 1 "LED" H 2450 6200 50  0000 C CNN
+F 2 "" H 2450 6300 50  0000 C CNN
+F 3 "" H 2450 6300 50  0000 C CNN
+	1    2450 6300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R9
+U 1 1 57693DFE
+P 2450 6800
+F 0 "R9" V 2530 6800 50  0000 C CNN
+F 1 "250" V 2450 6800 50  0000 C CNN
+F 2 "" V 2380 6800 50  0000 C CNN
+F 3 "" H 2450 6800 50  0000 C CNN
+	1    2450 6800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 5900 2450 6100
+Wire Wire Line
+	2450 6500 2450 6650
+Wire Wire Line
+	2450 6950 2450 7200
+Wire Wire Line
+	3150 6350 3150 6000
+Wire Wire Line
+	3150 6000 2450 6000
+Connection ~ 2450 6000
+Wire Wire Line
+	3150 6550 3150 7050
+Wire Wire Line
+	3150 7050 2450 7050
+Connection ~ 2450 7050
+Text Notes 1350 6350 0    60   ~ 0
+LED power indicator
+Text Notes 3750 6500 0    60   ~ 0
+Screw terminal block for\npower connection
+Text Notes 4550 4500 0    60   ~ 0
+decoupling cap for U3
 $EndSCHEMATC
