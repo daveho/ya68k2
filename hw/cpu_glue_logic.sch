@@ -240,8 +240,8 @@ F 3 "" H 5300 3950 60  0000 C CNN
 	1    5300 3950
 	1    0    0    -1  
 $EndComp
-Text Notes 5400 3150 0    60   ~ 0
--DTACK, -BERR, and\n-VPA are hard wired\nfor the initial phase of\nthe project (with just\nROM and output port\ndevices.)
+Text Notes 5400 3550 0    60   ~ 0
+-DTACK, -BERR, -VPA,\nand -BR are hard wired\nfor the initial phase of\nthe project (with just\nROM and output port\ndevices.)
 Wire Wire Line
 	1850 3250 1350 3250
 Wire Wire Line
@@ -333,69 +333,9 @@ Wire Wire Line
 	3650 3750 5300 3750
 Wire Wire Line
 	5300 3750 5300 3950
-$Comp
-L R R?
-U 1 1 5761DC95
-P 5150 1900
-AR Path="/5761DC95" Ref="R?"  Part="1" 
-AR Path="/57614F17/5761DC95" Ref="R6"  Part="1" 
-F 0 "R6" V 5230 1900 40  0000 C CNN
-F 1 "10k" V 5157 1901 40  0000 C CNN
-F 2 "~" V 5080 1900 30  0000 C CNN
-F 3 "~" H 5150 1900 30  0000 C CNN
-	1    5150 1900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5150 1550 5150 1750
-$Comp
-L R R?
-U 1 1 5761E2E3
-P 4950 1900
-AR Path="/5761E2E3" Ref="R?"  Part="1" 
-AR Path="/57614F17/5761E2E3" Ref="R5"  Part="1" 
-F 0 "R5" V 5030 1900 40  0000 C CNN
-F 1 "10k" V 4957 1901 40  0000 C CNN
-F 2 "~" V 4880 1900 30  0000 C CNN
-F 3 "~" H 4950 1900 30  0000 C CNN
-	1    4950 1900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4950 1350 4950 1750
-$Comp
-L R R?
-U 1 1 5761E2F0
-P 4750 1900
-AR Path="/5761E2F0" Ref="R?"  Part="1" 
-AR Path="/57614F17/5761E2F0" Ref="R4"  Part="1" 
-F 0 "R4" V 4830 1900 40  0000 C CNN
-F 1 "10k" V 4757 1901 40  0000 C CNN
-F 2 "~" V 4680 1900 30  0000 C CNN
-F 3 "~" H 4750 1900 30  0000 C CNN
-	1    4750 1900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4750 1550 4750 1750
-$Comp
-L R R?
-U 1 1 5761E2FD
-P 4550 1900
-AR Path="/5761E2FD" Ref="R?"  Part="1" 
-AR Path="/57614F17/5761E2FD" Ref="R3"  Part="1" 
-F 0 "R3" V 4630 1900 40  0000 C CNN
-F 1 "10k" V 4557 1901 40  0000 C CNN
-F 2 "~" V 4480 1900 30  0000 C CNN
-F 3 "~" H 4550 1900 30  0000 C CNN
-	1    4550 1900
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4550 1550 4550 1750
 Wire Wire Line
 	5300 3650 3650 3650
-Text Notes 2550 1700 0    60   ~ 0
+Text Notes 2800 2200 0    60   ~ 0
 The IPL lines are not used at this\npoint (ROM-only) since there are no\nperipherals generating interrupts.
 Wire Wire Line
 	9200 2550 9750 2550
@@ -442,18 +382,14 @@ $EndComp
 $Comp
 L VCC #PWR?
 U 1 1 57644E6C
-P 4950 1350
-F 0 "#PWR?" H 4950 1200 50  0001 C CNN
-F 1 "VCC" H 4950 1500 50  0000 C CNN
-F 2 "" H 4950 1350 50  0000 C CNN
-F 3 "" H 4950 1350 50  0000 C CNN
-	1    4950 1350
+P 4500 1350
+F 0 "#PWR?" H 4500 1200 50  0001 C CNN
+F 1 "VCC" H 4500 1500 50  0000 C CNN
+F 2 "" H 4500 1350 50  0000 C CNN
+F 3 "" H 4500 1350 50  0000 C CNN
+	1    4500 1350
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4550 1550 5350 1550
-Connection ~ 4750 1550
-Connection ~ 4950 1550
 Wire Wire Line
 	3650 2650 3950 2650
 Wire Wire Line
@@ -537,10 +473,10 @@ Wire Wire Line
 	6950 2150 6950 2350
 Connection ~ 6950 2350
 $Comp
-L RR8 RR?
+L RR8 RR2
 U 1 1 57669443
 P 7050 5850
-F 0 "RR?" H 7100 6400 50  0000 C CNN
+F 0 "RR2" H 7100 6400 50  0000 C CNN
 F 1 "10k" V 7080 5850 50  0000 C CNN
 F 2 "" H 7050 5850 50  0000 C CNN
 F 3 "" H 7050 5850 50  0000 C CNN
@@ -610,40 +546,41 @@ Text GLabel 9750 3450 2    60   Input ~ 0
 -DEVOE
 Text Notes 10400 4200 2    60   ~ 0
 -DEVOE inverts processor's\nR/-W, and is fed to the -OE\npin of I/O devices so that they\noutput to data bus during read\ncycles and read from data bus\nduring write cycles. (Another\nidea stolen from 68Katy.)
-$Comp
-L R R7
-U 1 1 5766A8E5
-P 5350 1900
-F 0 "R7" V 5430 1900 40  0000 C CNN
-F 1 "10k" V 5357 1901 40  0000 C CNN
-F 2 "~" V 5280 1900 30  0000 C CNN
-F 3 "~" H 5350 1900 30  0000 C CNN
-	1    5350 1900
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
-	5350 1550 5350 1750
-Connection ~ 5150 1550
+	3650 2350 4900 2350
 Wire Wire Line
-	4550 2050 4550 2350
+	3650 2450 5000 2450
 Wire Wire Line
-	4550 2350 3650 2350
+	3650 3050 5100 3050
 Wire Wire Line
-	4750 2050 4750 2450
-Wire Wire Line
-	4750 2450 3650 2450
-Wire Wire Line
-	4950 2050 4950 3050
-Wire Wire Line
-	4950 3050 3650 3050
-Wire Wire Line
-	5150 2050 5150 3350
-Wire Wire Line
-	5150 3350 3650 3350
-Wire Wire Line
-	5350 2050 5350 3450
-Wire Wire Line
-	5350 3450 3650 3450
+	3650 3350 5200 3350
 Text GLabel 1650 2750 0    60   Input ~ 0
 CLK
+$Comp
+L RR8 RR1
+U 1 1 57694B36
+P 5250 1550
+F 0 "RR1" H 5300 2100 50  0000 C CNN
+F 1 "10k" V 5280 1550 50  0000 C CNN
+F 2 "" H 5250 1550 50  0000 C CNN
+F 3 "" H 5250 1550 50  0000 C CNN
+	1    5250 1550
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4800 1900 4800 2000
+Wire Wire Line
+	4800 2000 4500 2000
+Wire Wire Line
+	4500 2000 4500 1350
+Wire Wire Line
+	4900 2350 4900 1900
+Wire Wire Line
+	5000 2450 5000 1900
+Wire Wire Line
+	5100 3050 5100 1900
+Wire Wire Line
+	5200 3350 5200 1900
+Wire Wire Line
+	5300 3650 5300 1900
 $EndSCHEMATC
