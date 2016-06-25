@@ -1,6 +1,9 @@
 GAL22V10
 glue
 
+; Assemble this with my tweaked version of GALasm:
+; https://github.com/daveho/galasm
+
 
 ; Pins: pin names beginning with "N" are active low.
 ; E.g., -AS on the schematic becomes NAS in the GAL
