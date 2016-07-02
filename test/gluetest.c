@@ -6,6 +6,10 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+////////////////////////////////////////////////////////////////////////
+// Definitions
+////////////////////////////////////////////////////////////////////////
+
 // Wiring of test circuit:
 //
 // Simulated CPU control outputs:
@@ -21,16 +25,171 @@
 //    PC1: -OPORTEN
 //    PC2: -DEVOE
 
-int main(void) {
-	DDRB = 0x07;
+#define CTRL_CLK     0
+#define CTRL_NRST    1
+#define CTRL_NAS     2
+#define CTRL_NDS     3
+#define CTRL_RW      4
+#define CTRL_A19     5
 
-	// Just blink the LEDs connected to PB0, PB1, and PB2
+#define SIG_NROMEN   0
+#define SIG_NOPORTEN 1
+#define SIG_NDEVOE   2
+
+#define PORTB_MASK ((uint8_t)0x07)   // LEDs
+#define PORTC_MASK ((uint8_t)0x00)   // Signal inputs (from glue logic PLD)
+#define PORTD_MASK ((uint8_t)0x7F)   // Control outputs
+
+// Bit values
+#define L ((uint8_t)0)  // low bit
+#define H ((uint8_t)1)  // high bit
+#define T ((uint8_t)2)  // toggle bit value
+#define K ((uint8_t)3)  // keep previous bit value
+
+// Function prototypes
+uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos);
+uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
+void control_out(uint8_t ctrl);
+uint8_t signals_in(void);
+void assert_low(uint8_t sigs, uint8_t bitpos);
+void assert_high(uint8_t sigs, uint8_t bitpos);
+void fail(void);
+
+// Test functions
+void test_ndevoe(void);
+
+////////////////////////////////////////////////////////////////////////
+// Data
+////////////////////////////////////////////////////////////////////////
+
+uint8_t testnum;  // current test number
+
+////////////////////////////////////////////////////////////////////////
+// Main program
+////////////////////////////////////////////////////////////////////////
+
+int main(void) {
+	// Configure I/O ports for input/output.
+	// Use pull ups on unused inputs.
+	DDRB = PORTB_MASK;
+	PORTB = ~PORTB_MASK;
+	DDRC = PORTC_MASK;
+	PORTC = (uint8_t)0xF8; // only C0..C2 are driven by PLD
+	DDRD = PORTD_MASK;
+	PORTD = ~PORTD_MASK;
+
+	/*
 	for (;;) {
-		PORTB = 1;
-		_delay_ms(500);
-		PORTB = 2;
-		_delay_ms(500);
-		PORTB = 4;
-		_delay_ms(500);
+		PORTB ^= 1;
+		_delay_ms(250);
 	}
+	*/
+
+	testnum = 0;
+	test_ndevoe();
+	testnum++;
+
+	// All tests passed!
+	PORTB  = 1;
+	for (;;) { }
+}
+
+////////////////////////////////////////////////////////////////////////
+// Functions
+////////////////////////////////////////////////////////////////////////
+
+// Generate the next bit in the control signals.
+// Params:
+//   prev - previous control signals
+//   bit - bit value (L, H, T, or K)
+//   bitpos - bit position (e.g., 0 for low bit)
+// Returns:
+//   the next value of the bit (shifted into the correct position)
+uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos) {
+	uint8_t onbit = ((uint8_t)1) << bitpos;
+	uint8_t bitval = prev & onbit;
+	switch (bit) {
+	case L: bitval = ((uint8_t)0); break;
+	case H: bitval = onbit; break;
+	case T: bitval ^= onbit;
+	case K: break;
+	}
+	return bitval;
+}
+
+// Generate control signals.
+// Params:
+//    prev - previous control signal values
+//    c0..c5 - bit values (L/H/T/K) for each bit
+// Returns:
+//    the next control signal values
+uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5) {
+	uint8_t result =
+		next_bit(prev, c0, 0)
+		| next_bit(prev, c1, 1)
+		| next_bit(prev, c2, 2)
+		| next_bit(prev, c3, 3)
+		| next_bit(prev, c4, 4)
+		| next_bit(prev, c5, 5);
+	return result;
+}
+
+void control_out(uint8_t ctrl) {
+	PORTD |= (ctrl & 0x7F);
+}
+
+uint8_t signals_in(void) {
+	return PORTB & 0x07;
+}
+
+void assert_low(uint8_t sigs, uint8_t bitpos) {
+	uint8_t onbit = ((uint8_t)1) << bitpos;
+	if ((sigs & onbit) != 0) {
+		fail();
+	}
+}
+
+void assert_high(uint8_t sigs, uint8_t bitpos) {
+	uint8_t onbit = ((uint8_t)1) << bitpos;
+	if ((sigs & onbit) == 0) {
+		fail();
+	}
+}
+
+void fail() {
+	// TODO: blink the yellow LED to indicate which test failed
+	PORTB |= 4;
+	for (;;) { }
+}
+
+////////////////////////////////////////////////////////////////////////
+// Test functions
+////////////////////////////////////////////////////////////////////////
+
+void test_ndevoe(void) {
+	uint8_t ctrl = ((uint8_t)0), sigs;
+
+	// Generate reset
+	control_out(ctrl);
+	_delay_ms(10);
+
+	// End reset
+	ctrl = control(ctrl, T, H, K, K, K, K);
+	control_out(ctrl);
+
+	// Drive RW high (read)
+	ctrl = control(ctrl, T, H, K, K, H, K);
+	control_out(ctrl);
+
+	// Test that -DEVOE is low
+	sigs = signals_in();
+	assert_low(sigs, SIG_NDEVOE);
+
+	// Drive RW low (write)
+	ctrl = control(ctrl, T, H, K, K, L, K);
+	control_out(ctrl);
+
+	// Test that -DEVOE is high
+	sigs = signals_in();
+	assert_high(sigs, SIG_NDEVOE);
 }
