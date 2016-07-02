@@ -38,7 +38,7 @@
 
 #define PORTB_MASK ((uint8_t)0x07)   // LEDs
 #define PORTC_MASK ((uint8_t)0x00)   // Signal inputs (from glue logic PLD)
-#define PORTD_MASK ((uint8_t)0x7F)   // Control outputs
+#define PORTD_MASK ((uint8_t)0x3F)   // Control outputs
 
 // Bit values
 #define L ((uint8_t)0)  // low bit
@@ -54,9 +54,18 @@ uint8_t signals_in(void);
 void assert_low(uint8_t sigs, uint8_t bitpos);
 void assert_high(uint8_t sigs, uint8_t bitpos);
 void fail(void);
+uint8_t reset(void);
 
 // Test functions
 void test_ndevoe(void);
+
+#define CONTROL_LOOP(iters,ctrl_var,update) \
+do { \
+	for (uint16_t i = 0; i < (iters); i++) { \
+		ctrl_var = update; \
+		control_out(ctrl_var); \
+	} \
+} while (0)
 
 ////////////////////////////////////////////////////////////////////////
 // Data
@@ -135,7 +144,7 @@ uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, ui
 }
 
 void control_out(uint8_t ctrl) {
-	PORTD |= (ctrl & 0x7F);
+	PORTD = 0xC0 | (ctrl & 0x7F);
 }
 
 uint8_t signals_in(void) {
@@ -162,20 +171,33 @@ void fail() {
 	for (;;) { }
 }
 
+uint8_t reset(void) {
+	uint8_t ctrl = ((uint8_t)0);
+
+	// Set an initial state:
+	// CLK low, -RST low, -AS high, -DS high, RW high, A19 low
+	ctrl = control(ctrl, L, L, H, H, H, L);
+
+	// Just generate a clock signal for a while
+	// with the reset signal asserted (low)
+	CONTROL_LOOP(1000, ctrl, control(ctrl, T, K, K, K, K, K));
+
+	// Generate the clock signal for a while with
+	// the reset signal not asserted (high)
+	CONTROL_LOOP(1000, ctrl, control(ctrl, T, H, K, K, K, K));
+
+	return ctrl;
+}
+
 ////////////////////////////////////////////////////////////////////////
 // Test functions
 ////////////////////////////////////////////////////////////////////////
 
 void test_ndevoe(void) {
-	uint8_t ctrl = ((uint8_t)0), sigs;
+	uint8_t ctrl, sigs;
 
 	// Generate reset
-	control_out(ctrl);
-	_delay_ms(10);
-
-	// End reset
-	ctrl = control(ctrl, T, H, K, K, K, K);
-	control_out(ctrl);
+	ctrl = reset();
 
 	// Drive RW high (read)
 	ctrl = control(ctrl, T, H, K, K, H, K);
@@ -188,6 +210,8 @@ void test_ndevoe(void) {
 	// Drive RW low (write)
 	ctrl = control(ctrl, T, H, K, K, L, K);
 	control_out(ctrl);
+
+	_delay_ms(100);
 
 	// Test that -DEVOE is high
 	sigs = signals_in();
