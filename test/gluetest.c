@@ -139,7 +139,7 @@ void control_out(uint8_t ctrl) {
 }
 
 uint8_t signals_in(void) {
-	return PORTB & 0x07;
+	return PINC & 0x07;
 }
 
 void assert_low(uint8_t sigs, uint8_t bitpos) {
