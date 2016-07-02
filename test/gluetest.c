@@ -211,7 +211,7 @@ void test_ndevoe(void) {
 	ctrl = control(ctrl, T, H, K, K, L, K);
 	control_out(ctrl);
 
-	_delay_ms(100);
+	_delay_ms(0.0001);
 
 	// Test that -DEVOE is high
 	sigs = signals_in();
