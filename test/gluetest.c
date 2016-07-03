@@ -148,6 +148,13 @@ void control_out(uint8_t ctrl) {
 }
 
 uint8_t signals_in(void) {
+	// I'm not sure exactly why, but we seem to need to introduce a short
+	// delay before reading the signal values.  I'm wondering whether this
+	// has something to do with pipelining (i.e., the processor
+	// doesn't know there's a data dependency between the write
+	// of the controls and the read of the glue logic signals,
+	// and the read happens too early.)
+	_delay_ms(0.0001);
 	return PINC & 0x07;
 }
 
@@ -210,8 +217,6 @@ void test_ndevoe(void) {
 	// Drive RW low (write)
 	ctrl = control(ctrl, T, H, K, K, L, K);
 	control_out(ctrl);
-
-	_delay_ms(0.0001);
 
 	// Test that -DEVOE is high
 	sigs = signals_in();
