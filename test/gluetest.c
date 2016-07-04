@@ -51,20 +51,62 @@ uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos);
 uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
 void control_out(uint8_t ctrl);
 uint8_t signals_in(void);
-void assert_low(uint8_t sigs, uint8_t bitpos);
-void assert_high(uint8_t sigs, uint8_t bitpos);
-void fail(void);
+void assert_low(uint8_t sigs, uint8_t bitpos, uint8_t assertnum);
+void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum);
+void blinkn(uint8_t n, uint8_t bit);
+void fail(uint8_t assertnum);
 uint8_t reset(void);
 
 // Test functions
 void test_ndevoe(void);
+void test_nromen(void);
 
+// Iterate generation of control signals.
+// Params:
+//   iters - how many iterations
+//   ctrl_var - variable storing control signal values
+//   update - expression to update control signal values
 #define CONTROL_LOOP(iters,ctrl_var,update) \
 do { \
 	for (uint16_t i = 0; i < (iters); i++) { \
 		ctrl_var = update; \
 		control_out(ctrl_var); \
 	} \
+} while (0)
+
+// Run a test.
+// Params:
+//   testfn - the test function
+#define RUN_TEST(testfn) \
+do { \
+	testnum++; \
+	testfn(); \
+} while (0)
+
+// Implement an assert function.
+// Params:
+//   sigs - signal values (as read from signals_in())
+//   bitpos - which signal bit to test
+//   assertnum - the assertion number (within the current test function)
+//   op - != to assert signal bit is high, == to assert signal bit is low
+#define IMPL_ASSERT(sigs,bitpos,assertnum,op) \
+do { \
+	uint8_t onbit = ((uint8_t)1) << bitpos; \
+	if ((sigs & onbit) op 0) { \
+		fail(assertnum); \
+	} \
+} while (0)
+
+#define ASSERT_LOW(sigs,bitpos) \
+do { \
+	assert_low(sigs, bitpos, assertnum); \
+	assertnum++; \
+} while (0)
+
+#define ASSERT_HIGH(sigs,bitpos) \
+do { \
+	assert_high(sigs, bitpos, assertnum); \
+	assertnum++; \
 } while (0)
 
 ////////////////////////////////////////////////////////////////////////
@@ -87,19 +129,11 @@ int main(void) {
 	DDRD = PORTD_MASK;
 	PORTD = ~PORTD_MASK;
 
-	/*
-	for (;;) {
-		PORTB ^= 1;
-		_delay_ms(250);
-	}
-	*/
-
-	testnum = 0;
-	test_ndevoe();
-	testnum++;
+	RUN_TEST(test_ndevoe);
+	RUN_TEST(test_nromen);
 
 	// All tests passed!
-	PORTB  = 1;
+	PORTB  = 1; // green!
 	for (;;) { }
 }
 
@@ -143,10 +177,16 @@ uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, ui
 	return result;
 }
 
+// Output control signals.
+// Params:
+//   ctrl - the control signals
 void control_out(uint8_t ctrl) {
 	PORTD = 0xC0 | (ctrl & 0x7F);
 }
 
+// Read output signals from glue logic.
+// Returns:
+//    the output signals from the glue logic
 uint8_t signals_in(void) {
 	// I'm not sure exactly why, but we seem to need to introduce a short
 	// delay before reading the signal values.  I'm wondering whether this
@@ -158,26 +198,51 @@ uint8_t signals_in(void) {
 	return PINC & 0x07;
 }
 
-void assert_low(uint8_t sigs, uint8_t bitpos) {
-	uint8_t onbit = ((uint8_t)1) << bitpos;
-	if ((sigs & onbit) != 0) {
-		fail();
+// Assert glue logic signal is low.
+// Params:
+//    sigs - the glue logic signals (as read from signals_in())
+//    bitpos - the signal to check
+//    assertnum - assertion number (within current test function)
+void assert_low(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
+	IMPL_ASSERT(sigs, bitpos, assertnum, !=);
+}
+
+// Assert glue logic signal is high.
+// Params:
+//    sigs - the glue logic signals (as read from signals_in())
+//    bitpos - the signal to check
+//    assertnum - assertion number (within current test function)
+void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
+	IMPL_ASSERT(sigs, bitpos, assertnum, ==);
+}
+
+void blinkn(uint8_t n, uint8_t bit) {
+
+	PORTB &= ~bit;
+	_delay_ms(1000);
+	for (uint8_t i = 0; i < n; i++) {
+		PORTB |= bit;
+		_delay_ms(200);
+		PORTB &= ~bit;
+		_delay_ms(50);
 	}
 }
 
-void assert_high(uint8_t sigs, uint8_t bitpos) {
-	uint8_t onbit = ((uint8_t)1) << bitpos;
-	if ((sigs & onbit) == 0) {
-		fail();
-	}
-}
+// Called when a test fails.
+void fail(uint8_t assertnum) {
+	PORTB |= 4; // Red :-(
 
-void fail() {
+	const uint8_t yellow = (uint8_t) 2;
+	const uint8_t red = (uint8_t) 4;
+
 	// TODO: blink the yellow LED to indicate which test failed
-	PORTB |= 4;
-	for (;;) { }
+	for (;;) {
+		blinkn(testnum, red);
+		blinkn(assertnum, yellow);
+	}
 }
 
+// Send reset control signals.
 uint8_t reset(void) {
 	uint8_t ctrl = ((uint8_t)0);
 
@@ -201,7 +266,7 @@ uint8_t reset(void) {
 ////////////////////////////////////////////////////////////////////////
 
 void test_ndevoe(void) {
-	uint8_t ctrl, sigs;
+	uint8_t ctrl, sigs, assertnum = 1;
 
 	// Generate reset
 	ctrl = reset();
@@ -212,7 +277,7 @@ void test_ndevoe(void) {
 
 	// Test that -DEVOE is low
 	sigs = signals_in();
-	assert_low(sigs, SIG_NDEVOE);
+	ASSERT_LOW(sigs, SIG_NDEVOE);
 
 	// Drive RW low (write)
 	ctrl = control(ctrl, T, H, K, K, L, K);
@@ -220,5 +285,19 @@ void test_ndevoe(void) {
 
 	// Test that -DEVOE is high
 	sigs = signals_in();
-	assert_high(sigs, SIG_NDEVOE);
+	ASSERT_HIGH(sigs, SIG_NDEVOE);
+}
+
+void test_nromen(void) {
+	uint8_t ctrl, sigs, assertnum = 1;
+
+	// Generate reset
+	ctrl = reset();
+
+	// Send A19 low and assert -AS
+	ctrl = control(ctrl, T, H, L, K, K, H);
+	control_out(ctrl);
+
+	sigs = signals_in();
+	ASSERT_LOW(sigs, SIG_NROMEN);
 }
