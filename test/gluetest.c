@@ -302,4 +302,16 @@ void test_nromen(void) {
 	// -ROMEN should be asserted (low)
 	sigs = signals_in();
 	ASSERT_LOW(sigs, SIG_NROMEN);
+
+	// -ROMEN should not be asserted when RW is low (write cycle)
+	ctrl = control(ctrl, T, K, L, K, L, K);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_NROMEN);
+
+	// -ROMEN should not be asserted when A19 is high
+	ctrl = control(ctrl, T, K, L, K, H, H);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_NROMEN);
 }
