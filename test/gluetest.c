@@ -65,6 +65,7 @@ uint8_t reset(void);
 // Test functions
 void test_ndevoe(void);
 void test_nromen(void);
+void test_noporten(void);
 
 // Iterate generation of control signals.
 // Params:
@@ -134,8 +135,10 @@ int main(void) {
 	DDRD = PORTD_MASK;
 	PORTD = ~PORTD_MASK;
 
+	// Run the tests
 	RUN_TEST(test_ndevoe);
 	RUN_TEST(test_nromen);
+	RUN_TEST(test_noporten);
 
 	// All tests passed!
 	PORTB  = 1; // green!
@@ -330,4 +333,52 @@ void test_nromen(void) {
 	control_out(ctrl);
 	sigs = signals_in();
 	ASSERT_HIGH(sigs, SIG_NROMEN);
+}
+
+void test_noporten(void) {
+	uint8_t ctrl, sigs, assertnum = 1;
+
+	// Generate reset
+	ctrl = reset();
+
+	// -OPORTEN is asserted when:
+	//   -AS is asserted
+	//   -DS is asserted
+	//   RW is low (write)
+	//   A19 is high
+	ctrl = control(ctrl, T, H, L, L, L, H);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_LOW(sigs, SIG_NOPORTEN);
+
+	// -OPORTEN should not be asserted when -AS not asserted
+	ctrl = control(ctrl, T, K, H, K, K, K);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+
+	// -OPORTEN should not be asserted when -DS not asserted
+	ctrl = control(ctrl, T, K, L, H, K, K);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+
+	// -OPORTEN should not be asserted when RW high (read cycle)
+	ctrl = control(ctrl, T, K, L, L, H, K);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+
+	// -OPORTEN should not be asserted when A19 low
+	ctrl = control(ctrl, T, K, L, L, L, L);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+
+	// Verify that -OPORTEN is asserted again when control
+	// signals are correct
+	ctrl = control(ctrl, T, K, L, L, L, H);
+	control_out(ctrl);
+	sigs = signals_in();
+	ASSERT_LOW(sigs, SIG_NOPORTEN);
 }
