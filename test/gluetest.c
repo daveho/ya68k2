@@ -294,10 +294,11 @@ void test_nromen(void) {
 	// Generate reset
 	ctrl = reset();
 
-	// Send A19 low and assert -AS
-	ctrl = control(ctrl, T, H, L, K, K, H);
+	// Assert -AS (low), send A19 low
+	ctrl = control(ctrl, T, K, L, K, K, L);
 	control_out(ctrl);
 
+	// -ROMEN should be asserted (low)
 	sigs = signals_in();
 	ASSERT_LOW(sigs, SIG_NROMEN);
 }
