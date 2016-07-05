@@ -216,8 +216,13 @@ void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
 	IMPL_ASSERT(sigs, bitpos, assertnum, ==);
 }
 
+// Blink an LED specified number of times.
+// This is useful for indicating which test and assertion
+// failed.
+// Params:
+//   n - number of times to blink
+//   bit - which LED(s) to blink
 void blinkn(uint8_t n, uint8_t bit) {
-
 	PORTB &= ~bit;
 	_delay_ms(1000);
 	for (uint8_t i = 0; i < n; i++) {
@@ -229,16 +234,12 @@ void blinkn(uint8_t n, uint8_t bit) {
 }
 
 // Called when a test fails.
+// Params:
+//   assertnum - which assertion within the test failed
 void fail(uint8_t assertnum) {
-	PORTB |= 4; // Red :-(
-
-	const uint8_t yellow = (uint8_t) 2;
-	const uint8_t red = (uint8_t) 4;
-
-	// TODO: blink the yellow LED to indicate which test failed
 	for (;;) {
-		blinkn(testnum, red);
-		blinkn(assertnum, yellow);
+		blinkn(testnum, 4); // red: which test failed
+		blinkn(assertnum, 2); // yellow: which assertion faile
 	}
 }
 
