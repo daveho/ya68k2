@@ -141,10 +141,10 @@ int main(void) {
 // Functions
 ////////////////////////////////////////////////////////////////////////
 
-// Generate the next bit in the control signals.
+// Generate the next value of specified bit in the control signals.
 // Params:
 //   prev - previous control signals
-//   bit - bit value (L, H, T, or K)
+//   bit - bit value: L(ow), H(igh), T(oggle), or K(eep)
 //   bitpos - bit position (e.g., 0 for low bit)
 // Returns:
 //   the next value of the bit (shifted into the correct position)
@@ -152,10 +152,21 @@ uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos) {
 	uint8_t onbit = ((uint8_t)1) << bitpos;
 	uint8_t bitval = prev & onbit;
 	switch (bit) {
-	case L: bitval = ((uint8_t)0); break;
-	case H: bitval = onbit; break;
-	case T: bitval ^= onbit;
-	case K: break;
+	case L:
+		// L: drive the bit low
+		bitval = ((uint8_t)0);
+		break;
+	case H:
+		// H: drive the bit high
+		bitval = onbit;
+		break;
+	case T:
+		// T: toggle the bit
+		bitval ^= onbit;
+		break;
+	case K:
+		// K: keep the current value of the bit
+		break;
 	}
 	return bitval;
 }
