@@ -12,6 +12,11 @@
 
 // Wiring of test circuit:
 //
+// Indicator LEDs:
+//    PB0: green
+//    PB1: yellow
+//    PB2: red
+//
 // Simulated CPU control outputs:
 //    PD0: CLK
 //    PD1: -RST
