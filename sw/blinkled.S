@@ -32,3 +32,7 @@
 .delayend:
 	eori.b #0xFF, %d0	/* toggle the bits in %d0 */
 	jmp .top
+
+/*
+vim:ft=gasasm:
+*/
