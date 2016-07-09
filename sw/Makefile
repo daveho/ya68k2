@@ -11,6 +11,12 @@ PFX = m68k-elf
 %.hex : %.o
 	$(PFX)-objcopy -O ihex $< $*.hex
 
+# Make a 512K flash rom image
+%.img : %.bin
+	(binsize=$$(du -b blinkled.bin | cut -f 1); \
+		cp $*.bin $*.img; \
+		dd if=/dev/zero bs=$$(expr 524288 - $$binsize) count=1 >> $*.img)
+
 all : blinkled.bin blinkled.hex
 
 disassemble : blinkled.bin
