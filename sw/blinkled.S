@@ -12,10 +12,19 @@
 /* Iterations of delay loop before updating output value */
 #define DELAY 200000
 
-/*
- * Execution starts at address 0.
- */
 .org 0
+	/* First 4 bytes are the initial SSP (supervisor stack pointer) value:
+	 * we just set this to 0 (no RAM yet.) */
+	.byte 0, 0, 0, 0
+
+	/* Next 4 bytes are the initial program counter value. */
+	.byte 0, 0, 0, 8
+
+.org 8
+	/*
+	 * Code starts here.
+	 */
+.entry:
 	move.l #OPORT, %a0	/* address of the output port */
 	move.b #0x55, %d0	/* bit pattern to write to the output port */
 
