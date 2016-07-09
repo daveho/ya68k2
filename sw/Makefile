@@ -2,7 +2,7 @@
 
 PFX = m68k-elf
 
-%.o : %.S
+%.o : %.s
 	$(PFX)-as -m68008 -o $*.o $<
 
 %.bin : %.o

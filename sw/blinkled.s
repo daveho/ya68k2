@@ -7,10 +7,10 @@
  */
 
 /* Output port is mapped 0x8000-0x100000 */
-#define OPORT 0x80000
+.equ OPORT, 0x80000
 
 /* Iterations of delay loop before updating output value */
-#define DELAY 200000
+.equ DELAY, 200000
 
 .org 0
 	/* First 4 bytes are the initial SSP (supervisor stack pointer) value:
