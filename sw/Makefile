@@ -1,5 +1,10 @@
-# Assumes m68k-unknown-elf cross binutils/gcc are on the PATH.
+# Assumes m68k(-unknown)-elf cross binutils/gcc are on the PATH.
 
+# This is the target for the cross binutils/gcc I built under Linux.
+#PFX = m68k-unknown-elf
+
+# This is the target for the cross binutils/gcc built by the
+# rockboxdev.sh script under Cygwin.
 PFX = m68k-elf
 
 %.o : %.s
