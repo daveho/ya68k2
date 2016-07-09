@@ -14,7 +14,7 @@ PFX = m68k-elf
 all : blinkled.bin blinkled.hex
 
 disassemble : blinkled.bin
-	$(PFX)-objdump -b binary -m m68k:68008 -D blinkled.bin
+	$(PFX)-objdump -b binary -m m68k:68008 --start-address=8 -D blinkled.bin
 
 clean :
 	rm -f *.o *.bin *.hex
