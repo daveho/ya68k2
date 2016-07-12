@@ -20,8 +20,8 @@ AR = /NRST
 ; -DEVOE signal: this inverts the processor's
 ; R/-W signal.  The idea is to feed it to the
 ; -OE pin of I/O devices so that they output to
-; the bus during read cycles and read from
-; the bus during write cycles.
+; the bus during read cycles and don't output to the
+; bus during write cycles.
 NDEVOE = /RW
 
 
