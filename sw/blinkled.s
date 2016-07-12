@@ -10,7 +10,7 @@
 .equ OPORT, 0x80000
 
 /* Iterations of delay loop before updating output value */
-.equ DELAY, 200000
+.equ DELAY, 50000
 
 .org 0
 	/* First 4 bytes are the initial SSP (supervisor stack pointer) value:
