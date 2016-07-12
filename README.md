@@ -1,6 +1,6 @@
 # ya68k2 - a simple MC68008-based microcomputer
 
-> <a href="img/blinkenlights.jpg"><img alt="blinkenlights" style="width: 600px;" src="img/blinkenlights.jpg"></a>
+<a href="img/blinkenlights.jpg"><img alt="blinkenlights" style="width: 600px;" src="img/blinkenlights.jpg"></a>
 
 This is a project to build a simple computer based on the [Motorola 68008](https://en.wikipedia.org/wiki/Motorola_68008) CPU.
 
