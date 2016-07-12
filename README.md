@@ -30,11 +30,11 @@ Planned additions:
 
 ## Files
 
-The `hw` directory has the [KiCAD](http://kicad-pcb.org/) files, currently just a schematic since there's no PCB yet.  It also has the PLD equations for the GAL22V10 used for glue logic and address decoding.  The PLD file needs [galasm](https://github.com/daveho/galasm) to compile it into a JEDEC file which can be used to program the GAL22V10 device.  I use a Wellon VP-190 to program GALs.
+The [hw](hw) directory has the [KiCAD](http://kicad-pcb.org/) files, currently just a schematic since there's no PCB yet.  It also has the PLD equations for the GAL22V10 used for glue logic and address decoding.  The PLD file needs [galasm](https://github.com/daveho/galasm) to compile it into a JEDEC file which can be used to program the GAL22V10 device.  I use a Wellon VP-190 to program GALs.
 
-The `sw` directory has the firmware, currently just a blinking LED demo.  You will need an m68k binutils/gcc toolchain.  (See `scripts` directory below.)  The `make` target builds `blinkled.bin`, which you can program to a 512K flash ROM.  The `make disassemble` target shows a disassembly of the binary image, which is useful for seeing what is actually being loaded onto the flash chip.
+The [sw](sw) directory has the firmware, currently just a blinking LED demo.  You will need an m68k binutils/gcc toolchain.  (See `scripts` directory below.)  The `make` target builds `blinkled.bin`, which you can program to a 512K flash ROM.  The `make disassemble` target shows a disassembly of the binary image, which is useful for seeing what is actually being loaded onto the flash chip.
 
-The `scripts` directory has some useful scripts:
+The [scripts](scripts) directory has some useful scripts:
 
 * `buildcross.sh` downloads and builds a m68k-unknown-elf binutils/gcc toolchain: use this if you are using Linux
 * `rockboxdev.sh` downloads and builds a m68k-elf binutils/gcc toolchain: use this if you are using Cygwin (32 bit only!) on Windows
@@ -45,3 +45,11 @@ I have used other 68008 projects as a source of ideas, including:
 
 * [68008 project](https://docs.google.com/document/d/1ejW_Ist19tIXeA5HtEWixaLoc0-sR_q8bySJj5Sa7iY/edit): I used the same flash memory chip.
 * [68 Katy](http://www.bigmessowires.com/68-katy/): from the famous Steve Chamberlin.  I stole some of the glue logic, and also the pull up resistors on the data bus (which are not actually present in the current breadboard version of the circuit).
+
+## Copyrights/License
+
+The hardware and software are (c) David H. Hovemeyer &lt;<mailto:david.hovemeyer@gmail.com>&gt;.
+
+The hardware is licensed under the [CERN open hardware license v1.2](cern_ohl_v_1_2.txt).
+
+The software is licensed under the [MIT license](LICENSE.txt).
