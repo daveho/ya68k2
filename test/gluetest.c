@@ -24,9 +24,9 @@
 //    PD3: -DS
 //    PD4: RW
 //    PD5: A19
-//    PD6: A18 - TODO
-//    PD7: A17 - TODO
-//    PB6: A16 - TODO
+//    PD6: A18
+//    PD7: A17
+//    PB6: A16
 //
 // Inputs (reading glue logic outputs):
 //    PC0: -ROMEN
@@ -40,6 +40,9 @@
 #define CTRL_NDS     3
 #define CTRL_RW      4
 #define CTRL_A19     5
+#define CTRL_A18     6
+#define CTRL_A17     7
+#define CTRL_A16     8
 
 #define SIG_NROMEN   0
 #define SIG_NOPORTEN 1
