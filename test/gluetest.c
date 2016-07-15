@@ -69,8 +69,8 @@ uint8_t reset(void);
 // Test functions
 void test_booted(void);
 void test_ndevoe(void);
-#if 0
 void test_nromen(void);
+#if 0
 void test_noporten(void);
 #endif
 
@@ -156,8 +156,8 @@ int main(void) {
 	// Run the tests
 	RUN_TEST(test_booted);
 	RUN_TEST(test_ndevoe);
-#if 0
 	RUN_TEST(test_nromen);
+#if 0
 	RUN_TEST(test_noporten);
 #endif
 
@@ -368,9 +368,8 @@ void test_ndevoe(void) {
 	ASSERT_HIGH(SIG_NDEVOE);
 }
 
-#if 0
 void test_nromen(void) {
-	uint8_t ctrl, sigs, assertnum = 1;
+	DECLARE_TEST_VARS;
 
 	// Generate reset
 	ctrl = reset();
@@ -380,22 +379,33 @@ void test_nromen(void) {
 	control_out(ctrl);
 
 	// -ROMEN should be asserted (low)
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_NROMEN);
+	ASSERT_LOW(SIG_NROMEN);
 
 	// -ROMEN should not be asserted when RW is low (write cycle)
 	ctrl = control(ctrl, T, K, L, K, L, K);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NROMEN);
+	ASSERT_HIGH(SIG_NROMEN);
 
-	// -ROMEN should not be asserted when A19 is high
+	// Send A19 high and pulse the clock: -ROMEN should be
+	// asserted (low) because the glue logic has remapped it into
+	// the high part of the address space.
 	ctrl = control(ctrl, T, K, L, K, H, H);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NROMEN);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+	ASSERT_LOW(SIG_NROMEN);
+
+	// Now access the low part of the address space: -ROMEN
+	// should *not* be asserted because it is no longer mapped
+	// there
+	ctrl = control(ctrl, T, K, L, K, K, L);
+	control_out(ctrl);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+	ASSERT_HIGH(SIG_NROMEN);
 }
 
+#if 0
 void test_noporten(void) {
 	uint8_t ctrl, sigs, assertnum = 1;
 
