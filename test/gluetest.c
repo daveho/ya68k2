@@ -60,8 +60,8 @@ uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos);
 uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
 void control_out(uint8_t ctrl);
 uint8_t signals_in(void);
-void assert_low(uint8_t sigs, uint8_t bitpos, uint8_t assertnum);
-void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum);
+void assert_low(uint8_t bitpos, uint8_t assertnum);
+void assert_high(uint8_t bitpos, uint8_t assertnum);
 void blinkn(uint8_t n, uint8_t bit);
 void fail(uint8_t assertnum);
 uint8_t reset(void);
@@ -74,16 +74,18 @@ void test_nromen(void);
 void test_noporten(void);
 #endif
 
+#define DECLARE_TEST_VARS \
+uint8_t ctrl, assertnum = 1
+
 // Iterate generation of control signals.
 // Params:
 //   iters - how many iterations
-//   ctrl_var - variable storing control signal values
 //   update - expression to update control signal values
-#define CONTROL_LOOP(iters,ctrl_var,update) \
+#define CONTROL_LOOP(iters,update) \
 do { \
 	for (uint16_t i = 0; i < (iters); i++) { \
-		ctrl_var = update; \
-		control_out(ctrl_var); \
+		ctrl = update; \
+		control_out(ctrl); \
 	} \
 } while (0)
 
@@ -98,34 +100,34 @@ do { \
 
 // Implement an assert function.
 // Params:
-//   sigs - signal values (as read from signals_in())
 //   bitpos - which signal bit to test
 //   assertnum - the assertion number (within the current test function)
 //   op - != to assert signal bit is high, == to assert signal bit is low
-#define IMPL_ASSERT(sigs,bitpos,assertnum,op) \
+#define IMPL_ASSERT(bitpos,assertnum,op) \
 do { \
+	uint8_t sigs = signals_in(); \
 	uint8_t onbit = ((uint8_t)1) << bitpos; \
 	if ((sigs & onbit) op 0) { \
 		fail(assertnum); \
 	} \
 } while (0)
 
-#define ASSERT_LOW(sigs,bitpos) \
+#define ASSERT_LOW(bitpos) \
 do { \
-	assert_low(sigs, bitpos, assertnum); \
+	assert_low(bitpos, assertnum); \
 	assertnum++; \
 } while (0)
 
-#define ASSERT_HIGH(sigs,bitpos) \
+#define ASSERT_HIGH(bitpos) \
 do { \
-	assert_high(sigs, bitpos, assertnum); \
+	assert_high(bitpos, assertnum); \
 	assertnum++; \
 } while (0)
 
 // Toggle the clock
 // Params:
 //    ctrl - variable storing current control signals
-#define TOGGLE_CLOCK(ctrl) \
+#define TOGGLE_CLOCK() \
 do { \
 	ctrl = control(ctrl, T, K, K, K, K, K); \
 	control_out(ctrl); \
@@ -238,20 +240,18 @@ uint8_t signals_in(void) {
 
 // Assert glue logic signal is low.
 // Params:
-//    sigs - the glue logic signals (as read from signals_in())
 //    bitpos - the signal to check
 //    assertnum - assertion number (within current test function)
-void assert_low(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
-	IMPL_ASSERT(sigs, bitpos, assertnum, !=);
+void assert_low(uint8_t bitpos, uint8_t assertnum) {
+	IMPL_ASSERT(bitpos, assertnum, !=);
 }
 
 // Assert glue logic signal is high.
 // Params:
-//    sigs - the glue logic signals (as read from signals_in())
 //    bitpos - the signal to check
 //    assertnum - assertion number (within current test function)
-void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
-	IMPL_ASSERT(sigs, bitpos, assertnum, ==);
+void assert_high(uint8_t bitpos, uint8_t assertnum) {
+	IMPL_ASSERT(bitpos, assertnum, ==);
 }
 
 // Blink an LED specified number of times.
@@ -291,11 +291,11 @@ uint8_t reset(void) {
 
 	// Just generate a clock signal for a while
 	// with the reset signal asserted (low)
-	CONTROL_LOOP(1000, ctrl, control(ctrl, T, K, K, K, K, K));
+	CONTROL_LOOP(1000, control(ctrl, T, K, K, K, K, K));
 
 	// Generate the clock signal for a while with
 	// the reset signal not asserted (high)
-	CONTROL_LOOP(1000, ctrl, control(ctrl, T, H, K, K, K, K));
+	CONTROL_LOOP(1000, control(ctrl, T, H, K, K, K, K));
 
 	return ctrl;
 }
@@ -305,55 +305,50 @@ uint8_t reset(void) {
 ////////////////////////////////////////////////////////////////////////
 
 void test_booted(void) {
-	uint8_t ctrl, sigs, assertnum = 1;
+	DECLARE_TEST_VARS;
 
 	// Generate reset
 	ctrl = reset();
 
 	// BOOTED should be low
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_BOOTED);
+	ASSERT_LOW(SIG_BOOTED);
 
 	// Generate some references to addresses in the low 512K
-	CONTROL_LOOP(1000, ctrl, control(ctrl, T, K, K, K, K, K)); // TODO: toggle A16..A18
+	CONTROL_LOOP(1000, control(ctrl, T, K, K, K, K, K)); // TODO: toggle A16..A18
 
 	// BOOTED should still be low
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_BOOTED);
+	ASSERT_LOW(SIG_BOOTED);
 
 	// Generate a reference to an address in the high 512K,
 	// then generate a full clock pulse
 	ctrl = control(ctrl, T, K, K, K, K, H);
 	control_out(ctrl);
-	TOGGLE_CLOCK(ctrl);
-	TOGGLE_CLOCK(ctrl);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
 
 	// BOOTED should now be high
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_BOOTED);
+	ASSERT_HIGH(SIG_BOOTED);
 
 	// Generate another reference to an address in the low 512K
 	ctrl = control(ctrl, T, K, K, K, K, L);
 	control_out(ctrl);
 
 	// Generate a full clock pulse
-	TOGGLE_CLOCK(ctrl);
-	TOGGLE_CLOCK(ctrl);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
 
 	// BOOTED should still be high
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_BOOTED);
+	ASSERT_HIGH(SIG_BOOTED);
 
 	// Issue a reset
 	ctrl = reset();
 
 	// BOOTED should be low again
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_BOOTED);
+	ASSERT_LOW(SIG_BOOTED);
 }
 
 void test_ndevoe(void) {
-	uint8_t ctrl, sigs, assertnum = 1;
+	DECLARE_TEST_VARS;
 
 	// Generate reset
 	ctrl = reset();
@@ -363,16 +358,14 @@ void test_ndevoe(void) {
 	control_out(ctrl);
 
 	// Test that -DEVOE is low
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_NDEVOE);
+	ASSERT_LOW(SIG_NDEVOE);
 
 	// Drive RW low (write)
 	ctrl = control(ctrl, T, H, K, K, L, K);
 	control_out(ctrl);
 
 	// Test that -DEVOE is high
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NDEVOE);
+	ASSERT_HIGH(SIG_NDEVOE);
 }
 
 #if 0
