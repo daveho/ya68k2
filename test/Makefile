@@ -9,7 +9,12 @@ OBJCOPY = avr-objcopy
 
 # This is correct for the $10 USB programmer from alldav.com
 AVRDUDE_PROGRAMMER = stk500v2
-AVRDUDE_PORT = /dev/ttyUSB0
+
+# Linux
+#AVRDUDE_PORT = /dev/ttyUSB0
+
+# Windows
+AVRDUDE_PORT = COM4
 
 # Note that the default target just builds the hex file:
 # use "make program" to burn it to the device

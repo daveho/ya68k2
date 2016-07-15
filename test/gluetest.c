@@ -24,11 +24,14 @@
 //    PD3: -DS
 //    PD4: RW
 //    PD5: A19
+//    PD6: A18 - TODO
+//    PD7: A17 - TODO
 //
 // Inputs (reading glue logic outputs):
 //    PC0: -ROMEN
 //    PC1: -OPORTEN
 //    PC2: -DEVOE
+//    PC3: BOOTED
 
 #define CTRL_CLK     0
 #define CTRL_NRST    1
@@ -40,6 +43,7 @@
 #define SIG_NROMEN   0
 #define SIG_NOPORTEN 1
 #define SIG_NDEVOE   2
+#define SIG_BOOTED   3
 
 #define PORTB_MASK ((uint8_t)0x07)   // LEDs
 #define PORTC_MASK ((uint8_t)0x00)   // Signal inputs (from glue logic PLD)
@@ -63,9 +67,12 @@ void fail(uint8_t assertnum);
 uint8_t reset(void);
 
 // Test functions
+void test_booted(void);
 void test_ndevoe(void);
+#if 0
 void test_nromen(void);
 void test_noporten(void);
+#endif
 
 // Iterate generation of control signals.
 // Params:
@@ -115,6 +122,15 @@ do { \
 	assertnum++; \
 } while (0)
 
+// Toggle the clock
+// Params:
+//    ctrl - variable storing current control signals
+#define TOGGLE_CLOCK(ctrl) \
+do { \
+	ctrl = control(ctrl, T, K, K, K, K, K); \
+	control_out(ctrl); \
+} while (0)
+
 ////////////////////////////////////////////////////////////////////////
 // Data
 ////////////////////////////////////////////////////////////////////////
@@ -131,14 +147,17 @@ int main(void) {
 	DDRB = PORTB_MASK;
 	PORTB = ~PORTB_MASK;
 	DDRC = PORTC_MASK;
-	PORTC = (uint8_t)0xF8; // only C0..C2 are driven by PLD
+	PORTC = (uint8_t)0xF0; // only C0..C3 are driven by PLD
 	DDRD = PORTD_MASK;
 	PORTD = ~PORTD_MASK;
 
 	// Run the tests
+	RUN_TEST(test_booted);
 	RUN_TEST(test_ndevoe);
+#if 0
 	RUN_TEST(test_nromen);
 	RUN_TEST(test_noporten);
+#endif
 
 	// All tests passed!
 	PORTB  = 1; // green!
@@ -214,7 +233,7 @@ uint8_t signals_in(void) {
 	// of the controls and the read of the glue logic signals,
 	// and the read happens too early.)
 	_delay_ms(0.0001);
-	return PINC & 0x07;
+	return PINC & 0x0F;
 }
 
 // Assert glue logic signal is low.
@@ -285,6 +304,54 @@ uint8_t reset(void) {
 // Test functions
 ////////////////////////////////////////////////////////////////////////
 
+void test_booted(void) {
+	uint8_t ctrl, sigs, assertnum = 1;
+
+	// Generate reset
+	ctrl = reset();
+
+	// BOOTED should be low
+	sigs = signals_in();
+	ASSERT_LOW(sigs, SIG_BOOTED);
+
+	// Generate some references to addresses in the low 512K
+	CONTROL_LOOP(1000, ctrl, control(ctrl, T, K, K, K, K, K)); // TODO: toggle A16..A18
+
+	// BOOTED should still be low
+	sigs = signals_in();
+	ASSERT_LOW(sigs, SIG_BOOTED);
+
+	// Generate a reference to an address in the high 512K,
+	// then generate a full clock pulse
+	ctrl = control(ctrl, T, K, K, K, K, H);
+	control_out(ctrl);
+	TOGGLE_CLOCK(ctrl);
+	TOGGLE_CLOCK(ctrl);
+
+	// BOOTED should now be high
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_BOOTED);
+
+	// Generate another reference to an address in the low 512K
+	ctrl = control(ctrl, T, K, K, K, K, L);
+	control_out(ctrl);
+
+	// Generate a full clock pulse
+	TOGGLE_CLOCK(ctrl);
+	TOGGLE_CLOCK(ctrl);
+
+	// BOOTED should still be high
+	sigs = signals_in();
+	ASSERT_HIGH(sigs, SIG_BOOTED);
+
+	// Issue a reset
+	ctrl = reset();
+
+	// BOOTED should be low again
+	sigs = signals_in();
+	ASSERT_LOW(sigs, SIG_BOOTED);
+}
+
 void test_ndevoe(void) {
 	uint8_t ctrl, sigs, assertnum = 1;
 
@@ -308,6 +375,7 @@ void test_ndevoe(void) {
 	ASSERT_HIGH(sigs, SIG_NDEVOE);
 }
 
+#if 0
 void test_nromen(void) {
 	uint8_t ctrl, sigs, assertnum = 1;
 
@@ -382,3 +450,4 @@ void test_noporten(void) {
 	sigs = signals_in();
 	ASSERT_LOW(sigs, SIG_NOPORTEN);
 }
+#endif
