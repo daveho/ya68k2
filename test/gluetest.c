@@ -403,6 +403,15 @@ void test_nromen(void) {
 	TOGGLE_CLOCK();
 	TOGGLE_CLOCK();
 	ASSERT_HIGH(SIG_NROMEN);
+
+	// Generate a reset
+	ctrl = reset();
+
+	// Now the ROM should be once again mapped in the low part of
+	// the address space
+	ctrl = control(ctrl, T, K, L, K, K, L);
+	control_out(ctrl);
+	ASSERT_LOW(SIG_NROMEN);
 }
 
 #if 0
