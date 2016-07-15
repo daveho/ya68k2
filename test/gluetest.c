@@ -46,9 +46,9 @@
 #define SIG_NDEVOE   2
 #define SIG_BOOTED   3
 
-#define PORTB_MASK ((uint8_t)0x07)   // LEDs
+#define PORTB_MASK ((uint8_t)0x47)   // LEDs (on PB0..PB2), also A16 (on PB6)
 #define PORTC_MASK ((uint8_t)0x00)   // Signal inputs (from glue logic PLD)
-#define PORTD_MASK ((uint8_t)0x3F)   // Control outputs
+#define PORTD_MASK ((uint8_t)0xFF)   // Control outputs
 
 // Bit values
 #define L ((uint8_t)0)  // low bit
@@ -154,11 +154,11 @@ int main(void) {
 	// Configure I/O ports for input/output.
 	// Use pull ups on unused inputs.
 	DDRB = PORTB_MASK;
-	PORTB = ~PORTB_MASK;
+	PORTB = (uint8_t) ~PORTB_MASK;
 	DDRC = PORTC_MASK;
 	PORTC = (uint8_t)0xF0; // only C0..C3 are driven by PLD
 	DDRD = PORTD_MASK;
-	PORTD = ~PORTD_MASK;
+	PORTD = (uint8_t) ~PORTD_MASK;
 
 	// Run the tests
 	RUN_TEST(test_booted);
@@ -228,7 +228,17 @@ control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3
 // Params:
 //   ctrl - the control signals
 void control_out(control_t ctrl) {
-	PORTD = 0xC0 | (ctrl & 0x7F);
+	// Most of the control signals are output on PORTD
+	PORTD = (ctrl & 0xFF);
+
+	// A16 is output on PB6
+	uint16_t a16 = (ctrl & ((uint16_t)1 << 8));
+	uint8_t a16_bitval = ((uint8_t)1 << 6);
+	if (a16) {
+		PORTB |= a16_bitval; // drive A16 high
+	} else {
+		PORTB &= ~a16_bitval; // drive A6 low
+	}
 }
 
 // Read output signals from glue logic.
