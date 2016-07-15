@@ -26,6 +26,7 @@
 //    PD5: A19
 //    PD6: A18 - TODO
 //    PD7: A17 - TODO
+//    PB6: A16 - TODO
 //
 // Inputs (reading glue logic outputs):
 //    PC0: -ROMEN
@@ -55,16 +56,22 @@
 #define T ((uint8_t)2)  // toggle bit value
 #define K ((uint8_t)3)  // keep previous bit value
 
+// Data type for control outputs
+typedef uint16_t control_t;
+
+// Data type for signal inputs
+typedef uint8_t signal_t;
+
 // Function prototypes
-uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos);
-uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
-void control_out(uint8_t ctrl);
+control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos);
+control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
+void control_out(control_t ctrl);
 uint8_t signals_in(void);
 void assert_low(uint8_t bitpos, uint8_t assertnum);
 void assert_high(uint8_t bitpos, uint8_t assertnum);
 void blinkn(uint8_t n, uint8_t bit);
 void fail(uint8_t assertnum);
-uint8_t reset(void);
+control_t reset(void);
 
 // Test functions
 void test_booted(void);
@@ -75,7 +82,7 @@ void test_noporten(void);
 #endif
 
 #define DECLARE_TEST_VARS \
-uint8_t ctrl, assertnum = 1
+control_t ctrl; uint8_t assertnum = 1
 
 // Iterate generation of control signals.
 // Params:
@@ -106,7 +113,7 @@ do { \
 #define IMPL_ASSERT(bitpos,assertnum,op) \
 do { \
 	uint8_t sigs = signals_in(); \
-	uint8_t onbit = ((uint8_t)1) << bitpos; \
+	control_t onbit = ((control_t)1) << bitpos; \
 	if ((sigs & onbit) op 0) { \
 		fail(assertnum); \
 	} \
@@ -177,13 +184,13 @@ int main(void) {
 //   bitpos - bit position (e.g., 0 for low bit)
 // Returns:
 //   the next value of the bit (shifted into the correct position)
-uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos) {
-	uint8_t onbit = ((uint8_t)1) << bitpos;
-	uint8_t bitval = prev & onbit;
+control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos) {
+	control_t onbit = ((control_t)1) << bitpos;
+	control_t bitval = prev & onbit;
 	switch (bit) {
 	case L:
 		// L: drive the bit low
-		bitval = ((uint8_t)0);
+		bitval = ((control_t)0);
 		break;
 	case H:
 		// H: drive the bit high
@@ -206,8 +213,8 @@ uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos) {
 //    c0..c5 - bit values (L/H/T/K) for each bit
 // Returns:
 //    the next control signal values
-uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5) {
-	uint8_t result =
+control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5) {
+	control_t result =
 		next_bit(prev, c0, 0)
 		| next_bit(prev, c1, 1)
 		| next_bit(prev, c2, 2)
@@ -220,7 +227,7 @@ uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, ui
 // Output control signals.
 // Params:
 //   ctrl - the control signals
-void control_out(uint8_t ctrl) {
+void control_out(control_t ctrl) {
 	PORTD = 0xC0 | (ctrl & 0x7F);
 }
 
@@ -282,8 +289,8 @@ void fail(uint8_t assertnum) {
 }
 
 // Send reset control signals.
-uint8_t reset(void) {
-	uint8_t ctrl = ((uint8_t)0);
+control_t reset(void) {
+	control_t ctrl = ((control_t)0);
 
 	// Set an initial state:
 	// CLK low, -RST low, -AS high, -DS high, RW high, A19 low
