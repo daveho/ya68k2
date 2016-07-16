@@ -52,12 +52,12 @@
 #define K ((uint8_t)3)  // keep previous bit value
 
 // Function prototypes
-uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos);
-uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
-void control_out(uint8_t ctrl);
-uint8_t signals_in(void);
-void assert_low(uint8_t sigs, uint8_t bitpos, uint8_t assertnum);
-void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum);
+control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos);
+control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
+void control_out(control_t ctrl);
+signal_t signals_in(void);
+void assert_low(uint8_t bitpos, uint8_t assertnum);
+void assert_high(uint8_t bitpos, uint8_t assertnum);
 void blinkn(uint8_t n, uint8_t bit);
 void fail(uint8_t assertnum);
 uint8_t reset(void);
@@ -97,7 +97,8 @@ do { \
 //   op - != to assert signal bit is high, == to assert signal bit is low
 #define IMPL_ASSERT(sigs,bitpos,assertnum,op) \
 do { \
-	uint8_t onbit = ((uint8_t)1) << bitpos; \
+	signal_t sigs = signals_in(); \
+	control_t onbit = ((control_t)1) << bitpos; \
 	if ((sigs & onbit) op 0) { \
 		fail(assertnum); \
 	} \
@@ -206,7 +207,7 @@ void control_out(uint8_t ctrl) {
 // Read output signals from glue logic.
 // Returns:
 //    the output signals from the glue logic
-uint8_t signals_in(void) {
+signal_t signals_in(void) {
 	// I'm not sure exactly why, but we seem to need to introduce a short
 	// delay before reading the signal values.  I'm wondering whether this
 	// has something to do with pipelining (i.e., the processor
