@@ -5,17 +5,22 @@ glue
 ; https://github.com/daveho/galasm
 
 
+; ----------------------------------------------------------------------
 ; Pins: pin names beginning with "N" are active low.
 ; E.g., -AS on the schematic becomes NAS in the GAL
-; equations, and /NAS means that -NAS is asserted.
+; equations, and /NAS means that -AS is asserted.
+; ----------------------------------------------------------------------
 
 CLK NRST NAS NDS RW FC0 FC1 FC2 A16 A17 A18 GND
-A19 NDEVOE P15 P16 P17 NOPORTEN P19 P20 P21 P22 NROMEN VCC
+A19 NDEVOE P15 P16 P17 NOPORTEN P19 P20 P21 BOOTED NROMEN VCC
 
+
+; ----------------------------------------------------------------------
+; Async reset, misc. control signals
+; ----------------------------------------------------------------------
 
 ; Asynchronous reset when -RST is asserted.
 AR = /NRST
-
 
 ; -DEVOE signal: this inverts the processor's
 ; R/-W signal.  The idea is to feed it to the
@@ -25,36 +30,36 @@ AR = /NRST
 NDEVOE = /RW
 
 
-
+; ----------------------------------------------------------------------
 ; Address decoding, chip selects.
-; For now, there are only two devices: a ROM at
-; 0x00000-0x80000, and a '374 output latch at
-; 0x80000-0x100000.  (The latter is for controlling
-; LEDs as a display, to see if the code running from
-; the ROM is actually doing something.)
+; On boot, the flash ROM is mapped from 0x00000-0x80000.
+; Once A19 goes high, then the BOOTED register is set,
+; and the ROM is mapped 0x80000-0x100000.
+; ----------------------------------------------------------------------
 
+; BOOTED register: initially 0 (on reset), set to 1 once A19
+; is observed to go high, i.e. on the first reference to addresses
+; at 0x80000 or above.  This allows the dynamic remapping of the
+; ROM from low to high memory.
+BOOTED.R = BOOTED + A19
 
 ; Chip select for ROM.
-; For now, it is mapped at 0x00000-0x80000 (A19 low).
-; The SST39SF040 has an active-low chip enable.
-; Note that the ROM is only enabled for reading
+; Initially mapped 0x00000-0x80000, then mapped 0x80000-0x100000
+; once BOOTED is set.  Note that the ROM is only enabled for reading
 ; (R/-W high).
-/NROMEN = /NAS*RW*/A19
-
+/NROMEN = /BOOTED*/NAS*RW*/A19 + BOOTED*/NAS*RW*A19
 
 ; Chip select for '374 output port.
-; For now it is mapped at 0x80000-0x100000.
+; Mapped at 0x70000-0x80000, but only once BOOTED is set to 1.
 ; We feed this into the CP (clock pulse) pin,
 ; and the data is latched on a low-to high transition,
 ; which happens when the CPU de-asserts /DS and /AS
 ; at the end of the write cycle.
-/NOPORTEN = /NAS*/NDS*/RW*A19
-
+/NOPORTEN = BOOTED*/NAS*/NDS*/RW*/A19*A18*A17*A16
 
 
 DESCRIPTION
 
 ya68k2 glue logic
-
 
 ; vim:syntax=off:

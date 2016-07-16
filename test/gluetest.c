@@ -24,11 +24,15 @@
 //    PD3: -DS
 //    PD4: RW
 //    PD5: A19
+//    PD6: A18
+//    PD7: A17
+//    PB6: A16
 //
 // Inputs (reading glue logic outputs):
 //    PC0: -ROMEN
 //    PC1: -OPORTEN
 //    PC2: -DEVOE
+//    PC3: BOOTED
 
 #define CTRL_CLK     0
 #define CTRL_NRST    1
@@ -36,20 +40,30 @@
 #define CTRL_NDS     3
 #define CTRL_RW      4
 #define CTRL_A19     5
+#define CTRL_A18     6
+#define CTRL_A17     7
+#define CTRL_A16     8
 
 #define SIG_NROMEN   0
 #define SIG_NOPORTEN 1
 #define SIG_NDEVOE   2
+#define SIG_BOOTED   3
 
-#define PORTB_MASK ((uint8_t)0x07)   // LEDs
+#define PORTB_MASK ((uint8_t)0x47)   // LEDs (on PB0..PB2), also A16 (on PB6)
 #define PORTC_MASK ((uint8_t)0x00)   // Signal inputs (from glue logic PLD)
-#define PORTD_MASK ((uint8_t)0x3F)   // Control outputs
+#define PORTD_MASK ((uint8_t)0xFF)   // Control outputs
 
 // Bit values
 #define L ((uint8_t)0)  // low bit
 #define H ((uint8_t)1)  // high bit
 #define T ((uint8_t)2)  // toggle bit value
 #define K ((uint8_t)3)  // keep previous bit value
+
+// Data type for control outputs
+typedef uint16_t control_t;
+
+// Data type for signal inputs
+typedef uint8_t signal_t;
 
 // Function prototypes
 control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos);
@@ -60,23 +74,28 @@ void assert_low(uint8_t bitpos, uint8_t assertnum);
 void assert_high(uint8_t bitpos, uint8_t assertnum);
 void blinkn(uint8_t n, uint8_t bit);
 void fail(uint8_t assertnum);
-uint8_t reset(void);
+control_t reset(void);
 
 // Test functions
+void test_booted(void);
 void test_ndevoe(void);
 void test_nromen(void);
+#if 0
 void test_noporten(void);
+#endif
+
+#define DECLARE_TEST_VARS \
+control_t ctrl; uint8_t assertnum = 1
 
 // Iterate generation of control signals.
 // Params:
 //   iters - how many iterations
-//   ctrl_var - variable storing control signal values
 //   update - expression to update control signal values
-#define CONTROL_LOOP(iters,ctrl_var,update) \
+#define CONTROL_LOOP(iters,update) \
 do { \
 	for (uint16_t i = 0; i < (iters); i++) { \
-		ctrl_var = update; \
-		control_out(ctrl_var); \
+		ctrl = update; \
+		control_out(ctrl); \
 	} \
 } while (0)
 
@@ -91,11 +110,10 @@ do { \
 
 // Implement an assert function.
 // Params:
-//   sigs - signal values (as read from signals_in())
 //   bitpos - which signal bit to test
 //   assertnum - the assertion number (within the current test function)
 //   op - != to assert signal bit is high, == to assert signal bit is low
-#define IMPL_ASSERT(sigs,bitpos,assertnum,op) \
+#define IMPL_ASSERT(bitpos,assertnum,op) \
 do { \
 	signal_t sigs = signals_in(); \
 	control_t onbit = ((control_t)1) << bitpos; \
@@ -104,16 +122,25 @@ do { \
 	} \
 } while (0)
 
-#define ASSERT_LOW(sigs,bitpos) \
+#define ASSERT_LOW(bitpos) \
 do { \
-	assert_low(sigs, bitpos, assertnum); \
+	assert_low(bitpos, assertnum); \
 	assertnum++; \
 } while (0)
 
-#define ASSERT_HIGH(sigs,bitpos) \
+#define ASSERT_HIGH(bitpos) \
 do { \
-	assert_high(sigs, bitpos, assertnum); \
+	assert_high(bitpos, assertnum); \
 	assertnum++; \
+} while (0)
+
+// Toggle the clock
+// Params:
+//    ctrl - variable storing current control signals
+#define TOGGLE_CLOCK() \
+do { \
+	ctrl = control(ctrl, T, K, K, K, K, K); \
+	control_out(ctrl); \
 } while (0)
 
 ////////////////////////////////////////////////////////////////////////
@@ -130,16 +157,19 @@ int main(void) {
 	// Configure I/O ports for input/output.
 	// Use pull ups on unused inputs.
 	DDRB = PORTB_MASK;
-	PORTB = ~PORTB_MASK;
+	PORTB = (uint8_t) ~PORTB_MASK;
 	DDRC = PORTC_MASK;
-	PORTC = (uint8_t)0xF8; // only C0..C2 are driven by PLD
+	PORTC = (uint8_t)0xF0; // only C0..C3 are driven by PLD
 	DDRD = PORTD_MASK;
-	PORTD = ~PORTD_MASK;
+	PORTD = (uint8_t) ~PORTD_MASK;
 
 	// Run the tests
+	RUN_TEST(test_booted);
 	RUN_TEST(test_ndevoe);
 	RUN_TEST(test_nromen);
+#if 0
 	RUN_TEST(test_noporten);
+#endif
 
 	// All tests passed!
 	PORTB  = 1; // green!
@@ -157,13 +187,13 @@ int main(void) {
 //   bitpos - bit position (e.g., 0 for low bit)
 // Returns:
 //   the next value of the bit (shifted into the correct position)
-uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos) {
-	uint8_t onbit = ((uint8_t)1) << bitpos;
-	uint8_t bitval = prev & onbit;
+control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos) {
+	control_t onbit = ((control_t)1) << bitpos;
+	control_t bitval = prev & onbit;
 	switch (bit) {
 	case L:
 		// L: drive the bit low
-		bitval = ((uint8_t)0);
+		bitval = ((control_t)0);
 		break;
 	case H:
 		// H: drive the bit high
@@ -186,8 +216,8 @@ uint8_t next_bit(uint8_t prev, uint8_t bit, uint8_t bitpos) {
 //    c0..c5 - bit values (L/H/T/K) for each bit
 // Returns:
 //    the next control signal values
-uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5) {
-	uint8_t result =
+control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5) {
+	control_t result =
 		next_bit(prev, c0, 0)
 		| next_bit(prev, c1, 1)
 		| next_bit(prev, c2, 2)
@@ -200,8 +230,18 @@ uint8_t control(uint8_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, ui
 // Output control signals.
 // Params:
 //   ctrl - the control signals
-void control_out(uint8_t ctrl) {
-	PORTD = 0xC0 | (ctrl & 0x7F);
+void control_out(control_t ctrl) {
+	// Most of the control signals are output on PORTD
+	PORTD = (ctrl & 0xFF);
+
+	// A16 is output on PB6
+	uint16_t a16 = (ctrl & ((uint16_t)1 << 8));
+	uint8_t a16_bitval = ((uint8_t)1 << 6);
+	if (a16) {
+		PORTB |= a16_bitval; // drive A16 high
+	} else {
+		PORTB &= ~a16_bitval; // drive A6 low
+	}
 }
 
 // Read output signals from glue logic.
@@ -215,25 +255,23 @@ signal_t signals_in(void) {
 	// of the controls and the read of the glue logic signals,
 	// and the read happens too early.)
 	_delay_ms(0.0001);
-	return PINC & 0x07;
+	return PINC & 0x0F;
 }
 
 // Assert glue logic signal is low.
 // Params:
-//    sigs - the glue logic signals (as read from signals_in())
 //    bitpos - the signal to check
 //    assertnum - assertion number (within current test function)
-void assert_low(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
-	IMPL_ASSERT(sigs, bitpos, assertnum, !=);
+void assert_low(uint8_t bitpos, uint8_t assertnum) {
+	IMPL_ASSERT(bitpos, assertnum, !=);
 }
 
 // Assert glue logic signal is high.
 // Params:
-//    sigs - the glue logic signals (as read from signals_in())
 //    bitpos - the signal to check
 //    assertnum - assertion number (within current test function)
-void assert_high(uint8_t sigs, uint8_t bitpos, uint8_t assertnum) {
-	IMPL_ASSERT(sigs, bitpos, assertnum, ==);
+void assert_high(uint8_t bitpos, uint8_t assertnum) {
+	IMPL_ASSERT(bitpos, assertnum, ==);
 }
 
 // Blink an LED specified number of times.
@@ -264,8 +302,8 @@ void fail(uint8_t assertnum) {
 }
 
 // Send reset control signals.
-uint8_t reset(void) {
-	uint8_t ctrl = ((uint8_t)0);
+control_t reset(void) {
+	control_t ctrl = ((control_t)0);
 
 	// Set an initial state:
 	// CLK low, -RST low, -AS high, -DS high, RW high, A19 low
@@ -273,11 +311,11 @@ uint8_t reset(void) {
 
 	// Just generate a clock signal for a while
 	// with the reset signal asserted (low)
-	CONTROL_LOOP(1000, ctrl, control(ctrl, T, K, K, K, K, K));
+	CONTROL_LOOP(1000, control(ctrl, T, K, K, K, K, K));
 
 	// Generate the clock signal for a while with
 	// the reset signal not asserted (high)
-	CONTROL_LOOP(1000, ctrl, control(ctrl, T, H, K, K, K, K));
+	CONTROL_LOOP(1000, control(ctrl, T, H, K, K, K, K));
 
 	return ctrl;
 }
@@ -286,8 +324,51 @@ uint8_t reset(void) {
 // Test functions
 ////////////////////////////////////////////////////////////////////////
 
+void test_booted(void) {
+	DECLARE_TEST_VARS;
+
+	// Generate reset
+	ctrl = reset();
+
+	// BOOTED should be low
+	ASSERT_LOW(SIG_BOOTED);
+
+	// Generate some references to addresses in the low 512K
+	CONTROL_LOOP(1000, control(ctrl, T, K, K, K, K, K)); // TODO: toggle A16..A18
+
+	// BOOTED should still be low
+	ASSERT_LOW(SIG_BOOTED);
+
+	// Generate a reference to an address in the high 512K,
+	// then generate a full clock pulse
+	ctrl = control(ctrl, T, K, K, K, K, H);
+	control_out(ctrl);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+
+	// BOOTED should now be high
+	ASSERT_HIGH(SIG_BOOTED);
+
+	// Generate another reference to an address in the low 512K
+	ctrl = control(ctrl, T, K, K, K, K, L);
+	control_out(ctrl);
+
+	// Generate a full clock pulse
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+
+	// BOOTED should still be high
+	ASSERT_HIGH(SIG_BOOTED);
+
+	// Issue a reset
+	ctrl = reset();
+
+	// BOOTED should be low again
+	ASSERT_LOW(SIG_BOOTED);
+}
+
 void test_ndevoe(void) {
-	uint8_t ctrl, sigs, assertnum = 1;
+	DECLARE_TEST_VARS;
 
 	// Generate reset
 	ctrl = reset();
@@ -297,20 +378,18 @@ void test_ndevoe(void) {
 	control_out(ctrl);
 
 	// Test that -DEVOE is low
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_NDEVOE);
+	ASSERT_LOW(SIG_NDEVOE);
 
 	// Drive RW low (write)
 	ctrl = control(ctrl, T, H, K, K, L, K);
 	control_out(ctrl);
 
 	// Test that -DEVOE is high
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NDEVOE);
+	ASSERT_HIGH(SIG_NDEVOE);
 }
 
 void test_nromen(void) {
-	uint8_t ctrl, sigs, assertnum = 1;
+	DECLARE_TEST_VARS;
 
 	// Generate reset
 	ctrl = reset();
@@ -320,22 +399,42 @@ void test_nromen(void) {
 	control_out(ctrl);
 
 	// -ROMEN should be asserted (low)
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_NROMEN);
+	ASSERT_LOW(SIG_NROMEN);
 
 	// -ROMEN should not be asserted when RW is low (write cycle)
 	ctrl = control(ctrl, T, K, L, K, L, K);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NROMEN);
+	ASSERT_HIGH(SIG_NROMEN);
 
-	// -ROMEN should not be asserted when A19 is high
+	// Send A19 high and pulse the clock: -ROMEN should be
+	// asserted (low) because the glue logic has remapped it into
+	// the high part of the address space.
 	ctrl = control(ctrl, T, K, L, K, H, H);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NROMEN);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+	ASSERT_LOW(SIG_NROMEN);
+
+	// Now access the low part of the address space: -ROMEN
+	// should *not* be asserted because it is no longer mapped
+	// there
+	ctrl = control(ctrl, T, K, L, K, K, L);
+	control_out(ctrl);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+	ASSERT_HIGH(SIG_NROMEN);
+
+	// Generate a reset
+	ctrl = reset();
+
+	// Now the ROM should be once again mapped in the low part of
+	// the address space
+	ctrl = control(ctrl, T, K, L, K, K, L);
+	control_out(ctrl);
+	ASSERT_LOW(SIG_NROMEN);
 }
 
+#if 0
 void test_noporten(void) {
 	uint8_t ctrl, sigs, assertnum = 1;
 
@@ -383,3 +482,4 @@ void test_noporten(void) {
 	sigs = signals_in();
 	ASSERT_LOW(sigs, SIG_NOPORTEN);
 }
+#endif
