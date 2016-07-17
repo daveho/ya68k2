@@ -67,7 +67,9 @@ typedef uint8_t signal_t;
 
 // Function prototypes
 control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos);
-control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5);
+control_t control(control_t prev, uint8_t clk, uint8_t rst, uint8_t nas, uint8_t nds, uint8_t rw, uint8_t a19);
+control_t control2(control_t prev, uint8_t clk, uint8_t rst, uint8_t nas, uint8_t nds, uint8_t rw, uint8_t a19,
+	uint8_t a18, uint8_t a17, uint8_t a16);
 void control_out(control_t ctrl);
 signal_t signals_in(void);
 void assert_low(uint8_t bitpos, uint8_t assertnum);
@@ -80,9 +82,7 @@ control_t reset(void);
 void test_booted(void);
 void test_ndevoe(void);
 void test_nromen(void);
-#if 0
 void test_noporten(void);
-#endif
 
 #define DECLARE_TEST_VARS \
 control_t ctrl; uint8_t assertnum = 1
@@ -167,9 +167,7 @@ int main(void) {
 	RUN_TEST(test_booted);
 	RUN_TEST(test_ndevoe);
 	RUN_TEST(test_nromen);
-#if 0
 	RUN_TEST(test_noporten);
-#endif
 
 	// All tests passed!
 	PORTB  = 1; // green!
@@ -211,19 +209,36 @@ control_t next_bit(control_t prev, uint8_t bit, uint8_t bitpos) {
 }
 
 // Generate control signals.
+// Leaves A16..A18 unchanged.
 // Params:
 //    prev - previous control signal values
-//    c0..c5 - bit values (L/H/T/K) for each bit
+//    clk,rst,nas,nds,rw,a19 - bit values (L/H/T/K) for each bit
 // Returns:
 //    the next control signal values
-control_t control(control_t prev, uint8_t c0, uint8_t c1, uint8_t c2, uint8_t c3, uint8_t c4, uint8_t c5) {
+control_t control(control_t prev, uint8_t clk, uint8_t rst, uint8_t nas, uint8_t nds, uint8_t rw, uint8_t a19) {
 	control_t result =
-		next_bit(prev, c0, 0)
-		| next_bit(prev, c1, 1)
-		| next_bit(prev, c2, 2)
-		| next_bit(prev, c3, 3)
-		| next_bit(prev, c4, 4)
-		| next_bit(prev, c5, 5);
+		next_bit(prev, clk, 0)
+		| next_bit(prev, rst, 1)
+		| next_bit(prev, nas, 2)
+		| next_bit(prev, nds, 3)
+		| next_bit(prev, rw, 4)
+		| next_bit(prev, a19, 5);
+	return result;
+}
+
+// Generate control signals.
+// Params:
+//    prev - previous control signal values
+//    clk,rst,nas,nds,rw,a19,a18,a17,a16 - bit values (L/H/T/K) for each bit
+// Returns:
+//    the next control signal values
+control_t control2(control_t prev, uint8_t clk, uint8_t rst, uint8_t nas, uint8_t nds, uint8_t rw, uint8_t a19,
+	uint8_t a18, uint8_t a17, uint8_t a16) {
+	control_t result =
+		control(prev, clk, rst, nas, nds, rw, a19)
+		| next_bit(prev, a18, 6)
+		| next_bit(prev, a17, 7)
+		| next_bit(prev, a16, 8);
 	return result;
 }
 
@@ -287,7 +302,7 @@ void blinkn(uint8_t n, uint8_t bit) {
 		PORTB |= bit;
 		_delay_ms(200);
 		PORTB &= ~bit;
-		_delay_ms(50);
+		_delay_ms(100);
 	}
 }
 
@@ -297,7 +312,7 @@ void blinkn(uint8_t n, uint8_t bit) {
 void fail(uint8_t assertnum) {
 	for (;;) {
 		blinkn(testnum, 4); // red: which test failed
-		blinkn(assertnum, 2); // yellow: which assertion faile
+		blinkn(assertnum, 2); // yellow: which assertion failed
 	}
 }
 
@@ -434,52 +449,67 @@ void test_nromen(void) {
 	ASSERT_LOW(SIG_NROMEN);
 }
 
-#if 0
 void test_noporten(void) {
-	uint8_t ctrl, sigs, assertnum = 1;
+	DECLARE_TEST_VARS;
 
 	// Generate reset
 	ctrl = reset();
 
 	// -OPORTEN is asserted when:
+	//   BOOTED is high because a memory reference to the high 512K has been made
 	//   -AS is asserted
 	//   -DS is asserted
 	//   RW is low (write)
-	//   A19 is high
-	ctrl = control(ctrl, T, H, L, L, L, H);
+	//   A19 is low, A16..A18 are high
+
+	// Generate a correct address for accessing the output port:
+	// -OPORTEN should *not* be asserted because BOOTED is still 0
+	ctrl = control2(ctrl, T, H, L, L, L, L, H, H, H);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_NOPORTEN);
+	ASSERT_HIGH(SIG_NOPORTEN);
+	ASSERT_LOW(SIG_BOOTED);
+
+	// Generate a reference to a high address, pulse the clock
+	// to give BOOTED a chance to latch
+	ctrl = control(ctrl, T, H, L, L, H, H);
+	control_out(ctrl);
+	TOGGLE_CLOCK();
+	TOGGLE_CLOCK();
+
+	// BOOTED should be high now
+	ASSERT_HIGH(SIG_BOOTED);
+
+	// *Now* a write to the output port's address range should
+	// result in -OPORTEN being asserted
+	ctrl = control2(ctrl, T, H, L, L, L, L, H, H, H);
+	control_out(ctrl);
+	ASSERT_LOW(SIG_NOPORTEN);
 
 	// -OPORTEN should not be asserted when -AS not asserted
 	ctrl = control(ctrl, T, K, H, K, K, K);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+	ASSERT_HIGH(SIG_NOPORTEN);
 
 	// -OPORTEN should not be asserted when -DS not asserted
 	ctrl = control(ctrl, T, K, L, H, K, K);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+	ASSERT_HIGH(SIG_NOPORTEN);
 
 	// -OPORTEN should not be asserted when RW high (read cycle)
 	ctrl = control(ctrl, T, K, L, L, H, K);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+	ASSERT_HIGH(SIG_NOPORTEN);
 
-	// -OPORTEN should not be asserted when A19 low
-	ctrl = control(ctrl, T, K, L, L, L, L);
+	// -OPORTEN should not be asserted when A19 high
+	ctrl = control(ctrl, T, K, L, L, L, H);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_HIGH(sigs, SIG_NOPORTEN);
+	ASSERT_HIGH(SIG_NOPORTEN);
+
+	// TODO: try other invalid combinations of A16..A19, verify -OPORTEN not asserted
 
 	// Verify that -OPORTEN is asserted again when control
 	// signals are correct
-	ctrl = control(ctrl, T, K, L, L, L, H);
+	ctrl = control2(ctrl, T, K, L, L, L, L, H, H, H);
 	control_out(ctrl);
-	sigs = signals_in();
-	ASSERT_LOW(sigs, SIG_NOPORTEN);
+	ASSERT_LOW(SIG_NOPORTEN);
 }
-#endif
