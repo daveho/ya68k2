@@ -32,6 +32,8 @@ Planned additions:
 
 The [hw](hw) directory has the [KiCAD](http://kicad-pcb.org/) files, currently just a schematic since there's no PCB yet.  It also has the PLD equations for the GAL22V10 used for glue logic and address decoding.  The PLD file needs [galasm](https://github.com/daveho/galasm) to compile it into a JEDEC file which can be used to program the GAL22V10 device.  I use a Wellon VP-190 to program GALs.
 
+The [test](test) directory has a test firmware program for testing the glue logic.  The test circuit uses an atmega328 microcontroller.
+
 The [sw](sw) directory has the firmware, currently just a blinking LED demo.  You will need an m68k binutils/gcc toolchain.  (See `scripts` directory below.)  The `make` target builds `blinkled.bin`, which you can program to a 512K flash ROM.  The `make disassemble` target shows a disassembly of the binary image, which is useful for seeing what is actually being loaded onto the flash chip.
 
 The [scripts](scripts) directory has some useful scripts:
