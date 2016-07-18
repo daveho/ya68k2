@@ -39,7 +39,7 @@ NDEVOE = /RW
 ; at 0x80000 or above.  While BOOTED is 0, the ROM is
 ; aliased at 0x00000-0x80000, and the other stuff that is
 ; normally mapped in that range is not accessible.
-BOOTED.R = BOOTED + A19
+BOOTED.R = BOOTED + /NAS*A19
 
 ; Chip select for ROM.
 ; Always mapped at 0x80000-0x100000.
