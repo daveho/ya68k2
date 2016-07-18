@@ -32,22 +32,22 @@ NDEVOE = /RW
 
 ; ----------------------------------------------------------------------
 ; Address decoding, chip selects.
-; On boot, the flash ROM is mapped from 0x00000-0x80000.
-; Once A19 goes high, then the BOOTED register is set,
-; and the ROM is mapped 0x80000-0x100000.
 ; ----------------------------------------------------------------------
 
 ; BOOTED register: initially 0 (on reset), set to 1 once A19
 ; is observed to go high, i.e. on the first reference to addresses
-; at 0x80000 or above.  This allows the dynamic remapping of the
-; ROM from low to high memory.
+; at 0x80000 or above.  While BOOTED is 0, the ROM is
+; aliased at 0x00000-0x80000, and the other stuff that is
+; normally mapped in that range is not accessible.
 BOOTED.R = BOOTED + A19
 
 ; Chip select for ROM.
-; Initially mapped 0x00000-0x80000, then mapped 0x80000-0x100000
-; once BOOTED is set.  Note that the ROM is only enabled for reading
+; Always mapped at 0x80000-0x100000.
+; On boot (while BOOTED is low), it is also aliased at
+; 0x00000-0x80000. Note that the ROM is only enabled for reading
 ; (R/-W high).
-/NROMEN = /BOOTED*/NAS*RW*/A19 + BOOTED*/NAS*RW*A19
+/NROMEN = /BOOTED*/NAS*RW*/A19
+        + /NAS*RW*A19
 
 ; Chip select for '374 output port.
 ; Mapped at 0x70000-0x80000, but only once BOOTED is set to 1.

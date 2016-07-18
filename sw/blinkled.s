@@ -1,29 +1,36 @@
 /*
  * Blink LEDs connected to '374 output port.
  *
- * This is for a very preliminary version of the hardware
- * where the ROM is mapped 0x00000-0x80000, and the output
- * port is mapped 0x80000-0x100000.  There is no RAM.
+ * The updated memory map has the ROM at 0x00000-0x80000 on
+ * boot, remapped to 0x80000-0x100000 when an address in
+ * the high 512K is observed.  The output port is
+ * mapped at 0x70000-0x80000, only after the ROM is
+ * remapped from the low part of the address space.
  */
 
-/* Output port is mapped 0x8000-0x100000 */
-.equ OPORT, 0x80000
+/* Output port is mapped 0x70000-0x80000 */
+.equ OPORT, 0x70000
 
 /* Iterations of delay loop before updating output value */
 .equ DELAY, 50000
 
-.org 0
+.org 0x80000
 	/* First 4 bytes are the initial SSP (supervisor stack pointer) value:
 	 * we just set this to 0 (no RAM yet.) */
 	.byte 0, 0, 0, 0
 
-	/* Next 4 bytes are the initial program counter value. */
+	/* Next 4 bytes are the initial program counter value.
+	 * We'll start by executing to the code using the low mapping,
+	 * and then manually jump to the high mapping. */
 	.byte 0, 0, 0, 8
 
-.org 8
+.org 0x80008
 	/*
 	 * Code starts here.
 	 */
+	move.l #0x80010, %a0	/* absolute address of .entry */
+	jmp (%a0)		/* jump to .entry using high mapping */
+
 .entry:
 	move.l #OPORT, %a0	/* address of the output port */
 	move.b #0x55, %d0	/* bit pattern to write to the output port */

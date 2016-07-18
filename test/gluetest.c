@@ -505,7 +505,20 @@ void test_noporten(void) {
 	control_out(ctrl);
 	ASSERT_HIGH(SIG_NOPORTEN);
 
-	// TODO: try other invalid combinations of A16..A19, verify -OPORTEN not asserted
+	// -OPORTEN should not be asserted when A18 is low
+	ctrl = control2(ctrl, T, K, L, L, L, L, L, H, H);
+	control_out(ctrl);
+	ASSERT_HIGH(SIG_NOPORTEN);
+
+	// -OPORTEN should not be asserted when A17 is low
+	ctrl = control2(ctrl, T, K, L, L, L, L, H, L, H);
+	control_out(ctrl);
+	ASSERT_HIGH(SIG_NOPORTEN);
+
+	// -OPORTEN should not be asserted when A16 is low
+	ctrl = control2(ctrl, T, K, L, L, L, L, H, H, L);
+	control_out(ctrl);
+	ASSERT_HIGH(SIG_NOPORTEN);
 
 	// Verify that -OPORTEN is asserted again when control
 	// signals are correct
